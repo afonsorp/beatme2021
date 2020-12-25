@@ -1,0 +1,21 @@
+@import '../../app/variables.scss';
+
+.o-noServer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: auto;
+    background-color: $white-color;
+    flex-direction: column;
+}
+
+.a-noServer__image{
+    margin-top: -10rem;
+    width: 3.5rem;
+}
+
+.a-noServer-text{
+    color:$base-color;
+    text-align: center;
+}
