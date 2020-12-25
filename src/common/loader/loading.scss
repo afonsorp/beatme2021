@@ -1,0 +1,21 @@
+@import '../../app/variables.scss';
+
+.o-loading{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: auto;
+    background-color: $white-color;
+    flex-direction: column;
+    &.-visible{
+        display: flex;
+    }
+}
+.a-loading__image{
+    margin-top: -10rem;
+    width: 3rem;
+}
+.a-loading__text{
+    color:$base-color;
+}

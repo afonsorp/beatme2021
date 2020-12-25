@@ -1,0 +1,20 @@
+@import '../../app/variables.scss';
+
+.o-notFound{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: auto;
+    background-color: $white-color;
+    flex-direction: column;
+}
+
+.a-notFound__image{
+    margin-top: -10rem;
+    width: 3.5rem;
+}
+
+.a-notFound-text{
+    color:$base-color;
+}
