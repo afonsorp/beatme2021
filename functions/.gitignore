@@ -1,3 +1,4 @@
 node_modules/
 
 .spotify-auth.js
+.service-account.json
