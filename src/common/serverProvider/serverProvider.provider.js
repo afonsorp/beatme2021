@@ -11,34 +11,14 @@ import { useFirebase } from '../firebaseProvider/firebaseProvider.useFirebase';
 const LOCAL_STORAGE_KEY = 'server_info';
 const SERVER_KEY_IDENTIFIER = 'key';
 
-const isValidServer = (server) => server.length > 7;
+const isValidServer = (server) => server && server.length > 7;
 
 export const ServerProvider = ({ children }) => {
   const { functions, database } = useFirebase();
   const location = useLocation();
   const [server, setServer] = useState();
+  const [isActive, setActive] = useState();
   const [serverLoading, setServerLoading] = useState(true);
-  const deactivateServer = useCallback(() => {
-    if (!database || !server) return;
-    console.log({ server });
-    database.ref(`/servers/${server}`).update({
-      active: false,
-      action: new Date(),
-    });
-  }, [database, server]);
-
-  const value = useMemo(
-    () => ({
-      server,
-      serverLoading,
-      deactivateServer,
-    }),
-    [
-      server,
-      serverLoading,
-      deactivateServer,
-    ],
-  );
 
   const checkActive = useCallback((key) => new Promise((resolve) => {
     database.ref(`/servers/${key}`).once('value').then((snapshot) => {
@@ -50,6 +30,64 @@ export const ServerProvider = ({ children }) => {
       }
     });
   }), [database]);
+
+  const setInStorage = useCallback((ip) => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, ip);
+  }, []);
+
+  const watchActive = useCallback((ip) => {
+    database.ref(`/servers/${ip}/active`).on('value', (snapshot) => {
+      const active = snapshot.val();
+      setActive(active);
+    });
+  }, [database]);
+
+  const setServerKey = useCallback((ip) => {
+    console.log({ ip });
+    const resolveIp = isValidServer(ip) ? ip : false;
+    setServerLoading(false);
+    setInStorage(resolveIp);
+    setServer(resolveIp);
+    watchActive(resolveIp);
+  }, [setInStorage, watchActive]);
+
+  const getIpRequest = useCallback((ignoreActive = false) => new Promise((resolve) => {
+    const getIp = functions.httpsCallable('getIp');
+    getIp().then((result) => {
+      const { ip } = result.data;
+      if (ip) {
+        const nIp = ip.replaceAll('.', '');
+        if (ignoreActive) {
+          // setServer(nIp);
+          resolve(nIp);
+          setServerKey(nIp);
+        } else {
+          checkActive(nIp).then((active) => resolve(active));
+        }
+      } else {
+        resolve(false);
+      }
+    }).catch(() => resolve(false));
+  }), [checkActive, functions, setServerKey]);
+
+  const value = useMemo(
+    () => ({
+      server,
+      serverLoading,
+      setServerLoading,
+      getIpRequest,
+      isActive,
+      // setServer,
+    }),
+    [
+      server,
+      serverLoading,
+      setServerLoading,
+      getIpRequest,
+      isActive,
+      // setServer,
+    ],
+  );
 
   const getFromUrl = useCallback(() => new Promise((resolve) => {
     const params = new Map(location.search.slice(1).split('&').map((kv) => kv.split('=')));
@@ -73,19 +111,6 @@ export const ServerProvider = ({ children }) => {
     });
   }, [checkActive]);
 
-  const getIpRequest = useCallback(() => new Promise((resolve) => {
-    const getIp = functions.httpsCallable('getIp');
-    getIp().then((result) => {
-      const { ip } = result.data;
-      if (ip) {
-        const nIp = ip.replaceAll('.', '');
-        checkActive(nIp).then((active) => resolve(active));
-      } else {
-        resolve(false);
-      }
-    });
-  }), [checkActive, functions]);
-
   const getServerList = useCallback(() => new Promise((resolve) => {
     database.ref('/servers').once('value', (serversList) => {
       let servers = [];
@@ -105,7 +130,10 @@ export const ServerProvider = ({ children }) => {
   const getByGeo = useCallback(() => new Promise((resolve) => {
     // Get User's Coordinate from their Browser
     getServerList().then((beatmeList) => {
-      const Failed = () => resolve(false);
+      const Failed = (error) => {
+        console.error({ error });
+        resolve(false);
+      };
       const distance = (lat1, lon1, lat2, lon2) => {
         const p = 0.017453292519943295; // Math.PI / 180
         const c = Math.cos;
@@ -152,23 +180,6 @@ export const ServerProvider = ({ children }) => {
     // Callback function for asynchronous call to HTML5 geolocation
   }), [getServerList]);
 
-  const setInStorage = useCallback((ip) => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, ip);
-  }, []);
-
-  const setServerKey = useCallback((ip) => {
-    const resolveIp = isValidServer(ip) ? ip : false;
-    setServerLoading(false);
-    setInStorage(resolveIp);
-    setServer(resolveIp);
-    if (resolveIp) {
-      database.ref(`/servers/${resolveIp}/active`).on('value', (snapshot) => {
-        const active = snapshot.val();
-        if (!active) setServer(active);
-      });
-    }
-  }, [setInStorage, database]);
-
   useEffect(() => {
     if (!serverLoading || !functions || !location || !database) return;
     getFromUrl().then((resUrl) => {
@@ -179,7 +190,7 @@ export const ServerProvider = ({ children }) => {
           if (resStorage) {
             setServerKey(resStorage);
           } else {
-            getIpRequest().then((resRequest) => {
+            getIpRequest(false).then((resRequest) => {
               if (resRequest) {
                 setServerKey(resRequest);
               } else {
@@ -200,16 +211,8 @@ export const ServerProvider = ({ children }) => {
     getByGeo,
     getFromStorage,
     getIpRequest,
-    setServerKey, serverLoading]);
-
-  const setupBeforeUnloadListener = useCallback(() => {
-    window.addEventListener('beforeunload', (ev) => {
-      ev.preventDefault();
-      return deactivateServer();
-    });
-  }, [deactivateServer]);
-
-  useEffect(() => setupBeforeUnloadListener(), [setupBeforeUnloadListener]);
+    setServerKey,
+    serverLoading]);
 
   return (
     <ServerContext.Provider value={value}>

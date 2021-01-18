@@ -1,0 +1,63 @@
+@import '../app/variables.scss';
+
+.m-beatme-header{
+    color: transparent;
+    flex: 1;
+    max-height: 1rem;
+}
+
+.m-beatme-header__menu{
+    display: flex;
+    padding-inline-start: 0.5rem;
+    padding-inline-end: 0.5rem;
+    // position: fixed;
+    z-index: 1;
+    width: 100%;
+    max-width: 600px;
+    background-color: transparent;
+    margin: 0;
+    padding: 0.5rem 0.5rem 0 0.5rem;
+}
+
+.a-beatme-header__item{
+    flex: 1 1 auto;
+    &.--last{
+        text-align: right;
+    }
+}
+
+.icon{
+    &.a-beatme-header__icon{
+        // color: $text-color-gray;
+        position: relative;
+        font-size: 1.5rem;
+    }
+}
+
+.a-beatme-header__menuButton,
+.a-beatme-header__menuButton:hover,
+.a-beatme-header__menuButton:focus,
+.a-beatme-header__menuButton:active,
+.a-beatme-header__menuButton:visited {
+        background: transparent;
+        border: none;
+        line-height: 0;
+        outline: none;
+        padding: 0;
+        .icon{
+            margin:0;
+        }
+    }
+.m-beatme-header__menuItem{
+    border-bottom: 1px solid $base-color-fade-md;
+}    
+
+.a-beatme-header__menuItem{
+    color: $text-color;
+    text-decoration: none;
+    width: 100%;
+    text-align: left;
+    &.selected{
+        color:$base-color;
+    }
+}
