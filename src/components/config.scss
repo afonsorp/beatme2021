@@ -1,0 +1,74 @@
+@import '../app/variables.scss';
+
+.leaflet-container{
+  margin-top: 1rem;
+  height: 400px;
+}
+.a-config-username{
+  width: fit-content;
+  border-bottom: 1px solid $base-color;
+  margin: 2rem 0 3rem;
+}
+.m-config-fieldSet{
+  border: 1px solid $base-color-fade-md;
+  margin-bottom: 1rem;
+  &.-genres{
+    display: flex;
+    flex-wrap: wrap;
+    .-label-input{
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      margin-right: 0.5rem;
+      width: 6rem;
+    }
+  }
+}
+
+.m-config-form{
+  legend{
+    font-size: 0.875rem;
+    color: $text-color;
+    margin-bottom: 0.5rem;
+  }
+  input{
+    font-size: 16px;
+    font-size: #{"max(16px, 1em)"};
+    font-family: inherit;
+    padding: 0.25em 0.5em;
+    background-color: #fff;
+    border: 1px solid $base-color-fade-md;
+    border-radius: 4px;
+    line-height: 1;
+    // height: 1.5rem;
+    transition: 180ms box-shadow ease-in-out;
+    color: $text-color;
+    margin-right: 0.5rem;
+    &:focus{
+      box-shadow: 0 0 0 3px $base-color-fade-md;
+      outline: 3px solid transparent;
+    };
+    &.-readonly{
+      border-style: dotted;
+      cursor: not-allowed;
+      background-color:$base-color-fade-sm;
+    }
+  }
+}
+
+.a-config-form__button{
+  float: right;
+  margin: 0;
+  margin: 0 0 1rem 0;
+  padding: 0.5rem 1rem;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  filter: sepia(60%);
+  }
+
+  .m-config-form__errorField{
+    font-size: 0.875rem;
+    color: $base-color;
+  }

@@ -1,12 +1,16 @@
 {
     "not.found.text":"ooops! this is nobody's land",
     "loading.text": "loading",
+    "login.spotify": "login with spotify",
     "login.facebook": "login with facebook",
     "login.google": "login with google",
     "login.twitter": "login with twitter",
     "no.session.message": "looks like there are no active sessions on this network, nor nearby. are you sure there's a beatme working here?",
+    "server.start.label": "start player",
+    "server.skip.label": "skip music",
     "menu.welcome": "welcome",
     "menu.home": "home",
+    "menu.settings": "settings",
     "menu.search": "add songs",
     "menu.favorites": "favorites",
     "menu.last.played": "played earlier",
@@ -17,6 +21,7 @@
     "menu.album.info": "album info",
     "menu.no.session": "no session",
     "search.results.suggestions": "suggestions for you",
+    "search.form.input": "search",
     "notify.music.removed": "music removed from playlist",
     "notify.music.to.favorites": "music added to your favorites",
     "notify.music.removed.favorites": "music removed from your favorites",
@@ -25,7 +30,12 @@
     "notify.music.playing": "music already playing",
     "notify.music.song.limit": "ups, looks like you already have the maximum musics allowed in playlist",
     "notify.music.voted": "like added with success",
+    "notify.music.error": "ups! we had an issue. try again later",
     "expandable.icon.delete":"delete",
     "expandable.icon.details":"details",
-    "expandable.icon.favorites":"favorites"
+    "expandable.icon.favorites":"add to favorites",
+    "MaxSong": "maximum number of songs a user can have, simultaneous, in a playlist (1-10)",
+    "MaxSongError": "number must be between 1 and 10",
+    "CheckBox": "select some of your favorite music genres",
+    "location": "select the beatme position on the map"
 }

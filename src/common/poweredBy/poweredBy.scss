@@ -1,0 +1,11 @@
+.m-powered-by{
+    display: flex;
+    position: fixed;
+    bottom: 1rem;
+    font-size: 0.875rem;
+    .a-powered-by__image{
+      width: 4rem;
+      margin-left: 0.5rem;
+      height: min-intrinsic;
+    }
+  }

@@ -1,0 +1,19 @@
+@import '../app/variables.scss';
+
+
+.m-playlist__container{
+  height: 50%;
+  flex:1;
+  background-color: $base-color-fade-lg;
+  padding-top: 0.5rem;
+}
+
+.m-playlist__container__list{
+    margin: 0 0.5rem;
+}
+
+.m-playlist__container__list{
+    height: 100%;
+    overflow: auto;
+    display: flex;
+}
