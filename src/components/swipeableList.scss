@@ -1,0 +1,68 @@
+@import '../app/variables.scss';
+
+.swipeable-list-item__content {
+    background-color: $play-back;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid $base-color-fade-md;
+}
+
+.m-swipeable-item__favorite,
+.m-swipeable-item__like,
+.m-swipeable-item__addSong{
+  font-size: 2rem;
+  cursor: pointer;
+  color: $white-color;
+}
+
+.m-swipeable-item__container__song{
+    color: $white-color;
+    position: relative;
+    width: 100%;
+    .m-swipeable-item__infoContainer{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .avatar {
+        vertical-align: middle;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 1px solid $white-color;
+      }
+      .m-swipeable-item__info{
+        display: flex;
+        flex-direction: column;
+        margin-left: 0.5rem;
+        flex: 1;
+      }
+      .a-swipeable-item__name{
+          font-size:0.875rem;
+          margin-bottom:0.2rem;
+      }
+      .a-swipeable-item__song{
+        font-size:1rem;
+      }
+      .m-swipeable-item__addSong{
+        font-size: 2rem;
+        cursor: pointer;
+      }
+}
+
+.a-swipeable-item__voteBadge{
+  background-color: $white-color;
+  color: $base-color;
+  border-radius: 50%;
+  border: 1px solid $base-color;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  position: absolute;
+  right: 1rem;
+  top: 0px;
+}
+
+

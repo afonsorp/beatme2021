@@ -5,9 +5,10 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    margin: auto;
+    margin: auto !important;
     background-color: $white-color;
     flex-direction: column;
+    height: 100%;
     &.-visible{
         display: flex;
     }

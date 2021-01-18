@@ -34,6 +34,9 @@ export const FirebaseProvider = ({ children }) => {
   const [firestore, setFirestore] = useState();
   const [database, setDatabase] = useState();
   const [functions, setFunctions] = useState();
+  const [googleAuthProvider, setGoogleAuthProvider] = useState();
+  const [facebookAuthProvider, setFacebookAuthProvider] = useState();
+  const [twitterAuthProvider, setTtwitterAuthProvider] = useState();
 
   const value = useMemo(
     () => ({
@@ -41,12 +44,18 @@ export const FirebaseProvider = ({ children }) => {
       firestore,
       database,
       functions,
+      googleAuthProvider,
+      facebookAuthProvider,
+      twitterAuthProvider,
     }),
     [
       auth,
       firestore,
       database,
       functions,
+      googleAuthProvider,
+      facebookAuthProvider,
+      twitterAuthProvider,
     ],
   );
 
@@ -56,6 +65,9 @@ export const FirebaseProvider = ({ children }) => {
     setFirestore(defaultProject.firestore());
     setDatabase(defaultProject.database());
     setFunctions(defaultProject.functions());
+    setGoogleAuthProvider(new Firebase.auth.GoogleAuthProvider());
+    setFacebookAuthProvider(new Firebase.auth.FacebookAuthProvider());
+    setTtwitterAuthProvider(new Firebase.auth.TwitterAuthProvider());
   }, []);
 
   return (

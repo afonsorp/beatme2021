@@ -1,0 +1,50 @@
+@import '../app/variables.scss';
+
+.m-login-bottom__container{
+    height: 50%;
+}
+
+.spotify-icon{
+    color: #1DB954;
+}
+
+.facebook-icon{
+  color: #607295;
+}
+.twitter-icon{
+  color: #6F97BE;
+
+}
+.google-icon{
+  color: #A8655B;
+}
+
+.m-login-top__container {
+  height: 50% !important;
+  position: relative;
+  overflow: hidden;
+  .image {
+    // line-height: 50vh;;
+    line-height: 300px;
+    text-align: center;
+    transform: translate3d(0, 0, 0);
+    margin: auto;
+    img{
+        width: 15rem;
+    }
+  }
+}
+
+.m-login-bottom__container{
+  height: 50%;
+  text-align: center;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    .button{
+        margin-bottom: 0.5rem;
+        width: 13rem;
+        justify-content: flex-start;
+      }
+  }

@@ -1,5 +1,11 @@
 $base-color: #F08F8F;
+$base-color-fade-lg:rgba($base-color, 0.7);
+$base-color-fade-md:rgba($base-color, 0.3);
+$base-color-fade-sm:rgba($base-color, 0.1);
+$play-back: #F4B0B1;
 $secondary-color: #E2E4E4;
 $white-color: #FFFFFF;
-
-
+$text-color: #242424;
+$text-color-gray: #aaaaaa;
+$shadow-color: 0 0 1rem rgba($text-color, 0.1);
+$yellow-color:#FFD700

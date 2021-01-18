@@ -1,11 +1,7 @@
-html, body, #root, #root>div {
-  height: 100%;
-  margin: auto;
-  max-width: 600px;
-}
+@import './variables.scss';
 
-#root{
-  margin: 0 0.5rem;
+* {
+  box-sizing: border-box;
 }
 
 body {
@@ -17,7 +13,130 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html, body, #root, #root > div:first-of-type:not(.customHeight) {
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  // max-width: 600px;
+  position: relative;
+  color: $text-color;
+  font-size: 1rem;
+}
+
+#root{
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  // background-image: linear-gradient($white-color, $base-color-fade-sm, $base-color-fade-md, $base-color-fade-lg, $base-color, $base-color);
+}
+
+html{
+  overflow: hidden;
+}
+
+// #root{
+//   overflow: auto;
+// }
+
+.o-beatme__app{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.global-container{
+  margin: 0 0.5rem !important;
+}
+
+.global-container__withTop{
+  padding-top: 3rem !important;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.icon{
+  cursor: pointer;
+  color:$base-color;
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+}
+
+.button{
+  // border: none;
+  background-color: transparent;
+  display: flex;
+  color: $text-color;
+  cursor: pointer;
+  font-size: 1rem;
+  align-items: center;
+  padding: 8px;
+  position: relative;
+  overflow: hidden;
+  outline: 0;
+  border: 0;
+  border-radius: 0.25rem;
+  box-shadow: $shadow-color;
+  height: 2.5rem;
+}
+
+.avatar {
+  vertical-align: middle;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid $base-color-fade-md;
+  object-fit: cover;
+  margin-right: 0.5rem;
+}
+
+// .m-playlist__container,
+// .m-playlist__container__list,
+.m-login-top__container {
+  .wave {
+    opacity: .8;
+    position: absolute;
+    top: 3%;
+    left: 50%;
+    background: $base-color;
+    width: 500px;
+    height: 500px;
+    margin-left: -250px;
+    margin-top: -250px;
+    transform-origin: 50% 48%;
+    border-radius: 43%;
+    animation: drift 3000ms infinite linear;
+  }
+  
+  .wave.-three {
+    animation: drift 5000ms infinite linear;
+  }
+  
+  .wave.-two {
+    animation: drift 7000ms infinite linear;
+    opacity: .1;
+    background: $secondary-color;
+  }
+  
+  .m-login-top__container:after {
+    content: '';
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba($base-color, 1), rgba($secondary-color, 0) 80%, rgba($white-color, .5));
+    z-index: 11;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000;
+  }
+  @keyframes drift {
+    from { transform: rotate(0deg); }
+    from { transform: rotate(360deg); }
+  }
 }
