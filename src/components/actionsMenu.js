@@ -14,6 +14,7 @@ import { useAuth } from '../common/authProvider/authProvider.useAuth';
 const ActionsMenu = () => {
   const { t } = useTranslation();
   const { user, authRoutes } = useAuth();
+  console.log({ authRoutes });
   const menuElements = authRoutes.filter((obj) => obj.showInMenu);
   return (
     <Menu

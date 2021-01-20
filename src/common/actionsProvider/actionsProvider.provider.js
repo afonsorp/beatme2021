@@ -17,12 +17,13 @@ export const ActionsProvider = ({ children }) => {
   const { t } = useTranslation();
   const {
     database,
+    firestore,
   } = useFirebase();
   const { server, getIpRequest } = useServer();
   const {
     startPlaying, play: skip, playing, playlist, songLimitValue,
   } = useSpotify();
-  const { user } = useAuth();
+  const { user, setLastSongFromUser } = useAuth();
 
   const activateServer = useCallback((ip) => {
     const { lat, lng } = user.details.location;
@@ -78,6 +79,10 @@ export const ActionsProvider = ({ children }) => {
     };
     if (!isPlaying && !inPlaylist && insideLimit) {
       database.ref(`playlists/${server}/playlist`).update({ [song.uri]: song }).then(() => {
+        firestore.collection('users').doc(user.uid).set({
+          lastSongByUser: song.uri,
+        }, { merge: true });
+        setLastSongFromUser(song.uri);
         toast.success(t('notify.music.added.playlist'));
       }).catch(() => {
         toast.error(t('notify.music.error'));
@@ -92,7 +97,16 @@ export const ActionsProvider = ({ children }) => {
     if (!insideLimit) {
       toast.warning(t('notify.music.song.limit'));
     }
-  }, [playing, playlist, songLimitValue, database, server, t]);
+  }, [playing,
+    playlist,
+    songLimitValue,
+    database,
+    server,
+    t,
+    firestore,
+    user,
+    setLastSongFromUser,
+  ]);
 
   const addVote = useCallback((element) => {
     database.ref(`playlists/${server}/playlist/${element.uri}/votes`).update({ [user.uid]: true }).catch(() => {

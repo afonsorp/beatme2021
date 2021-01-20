@@ -43,12 +43,6 @@ const ADMIN_ROUTES = [
     component: <Settings />,
     showInMenu: true,
   },
-  {
-    path: '/add_music',
-    label: 'menu.search',
-    component: <SearchPage />,
-    showInMenu: true,
-  },
 ];
 
 const USER_ROUTES = [
@@ -89,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     facebookAuthProvider,
     twitterAuthProvider,
   } = useFirebase();
-  const { getAndUpdateToken, setSpotifyUser } = useSpotify();
+  const { getAndUpdateToken, setSpotifyUser, updateSpotifyUser } = useSpotify();
   const history = useHistory();
   const [loadingUser, setLoadingUser] = useState(true);
   const [user, setUser] = useState();
@@ -121,11 +115,18 @@ export const AuthProvider = ({ children }) => {
     });
   }, [auth, history]);
 
+  const setLastSongFromUser = useCallback((song) => {
+    const nUser = user;
+    nUser.details.lastSongByUser = song;
+    setUser(nUser);
+    updateSpotifyUser(nUser);
+  }, [user, updateSpotifyUser]);
+
   const buildAuthMenu = useCallback((nUser) => {
     if (!nUser.isAdmin) {
-      setAuthRoutes(USER_ROUTES);
+      setAuthRoutes([...BASE_ROUTES, ...USER_ROUTES]);
     } else {
-      setAuthRoutes(ADMIN_ROUTES);
+      setAuthRoutes([...BASE_ROUTES, ...ADMIN_ROUTES]);
     }
   }, []);
 
@@ -164,6 +165,7 @@ export const AuthProvider = ({ children }) => {
       handleGoogleLogin,
       handleFacebookLogin,
       handleTwitterLogin,
+      setLastSongFromUser,
     }),
     [
       loadingUser,
@@ -176,21 +178,23 @@ export const AuthProvider = ({ children }) => {
       handleGoogleLogin,
       handleFacebookLogin,
       handleTwitterLogin,
+      setLastSongFromUser,
     ],
   );
 
   const authStateChange = useCallback((nUser) => new Promise((resolve) => {
     if (nUser) {
       const isAdmin = isAdministrator(nUser.uid);
+      const providerData = nUser.providerData[0];
       const collection = isAdmin ? 'servers' : 'users';
-      const id = isAdmin ? nUser.email : nUser.uid;
+      const id = isAdmin ? nUser.email : providerData.uid;
       firestore.collection(collection).doc(id).get().then((doc) => {
         const details = doc.exists ? doc.data() || {} : {};
         let userModel;
         if (!isAdmin) {
-          userModel = new User({ ...nUser, ...nUser.providerData[0], details }).user;
+          userModel = new User({ ...nUser, ...providerData, details }).user;
         } else {
-          userModel = new User({ ...nUser, ...nUser.providerData[0], ...details }).user;
+          userModel = new User({ ...nUser, ...providerData, ...details }).user;
         }
         buildAuthMenu(userModel);
         setSpotifyUser(userModel);

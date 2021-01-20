@@ -28,8 +28,8 @@ export const SpotifyProvider = ({ children }) => {
   const { server } = useServer();
   const [playlist, setPlaylist] = useState([]);
   const [playing, setPlaying] = useState();
+  const [lastPlayed, setLastPlayed] = useState([]);
   const [songLimitValue, setSongLimitValue] = useState(1);
-  // const [searchResults, setSearchResults] = useState();
   const player = useRef();
   const user = useRef();
   const deviceId = useRef();
@@ -58,6 +58,10 @@ export const SpotifyProvider = ({ children }) => {
       }).catch(() => resolve(false));
     }
   }), [functions, database, server]);
+
+  const updateSpotifyUser = useCallback((nUser) => {
+    user.current = nUser;
+  }, []);
 
   const setSpotifyUser = useCallback((nUser) => {
     const serverToUse = server || serverRef.current;
@@ -106,7 +110,7 @@ export const SpotifyProvider = ({ children }) => {
         console.error({ error });
         resolve([]);
       });
-  }), []);
+  }), [user]);
 
   const getRecommend = useCallback(() => new Promise((resolve) => {
     const { current: adminUser } = user;
@@ -142,17 +146,17 @@ export const SpotifyProvider = ({ children }) => {
     const { current: currentPlaying } = playingRef;
     const { current: currentPlaylist } = playlistRef;
     if (!ignorePlaying && currentPlaying) {
-      resolve(currentPlaying);
+      resolve({ song: currentPlaying, remove: false });
     } else if (currentPlaylist.length > 0) {
-      resolve(currentPlaylist[0]);
+      resolve({ song: currentPlaylist[0], remove: currentPlaying });
       // getRecommend().then((song) => resolve(song));
     } else {
-      getRecommend().then((song) => resolve(song));
+      getRecommend().then((song) => resolve({ song, remove: currentPlaying }));
     }
   }), [getRecommend]);
 
   const play = useCallback(({ ignorePlaying }) => new Promise((resolve) => {
-    getSongToPlay({ ignorePlaying }).then((song) => {
+    getSongToPlay({ ignorePlaying }).then(({ song, remove }) => {
       if (song) {
         axios.put(`${PLAY_URL}?device_id=${deviceId.current}`, { uris: [song.uri], position_ms: song.position }, {
           headers: {
@@ -162,7 +166,7 @@ export const SpotifyProvider = ({ children }) => {
         }).then(() => {
           const ref = database.ref(`playlists/${serverRef.current}`);
           ref.child('playing').update(song).then(() => {
-            console.log('update');
+            if (remove) ref.child(`lastPlayed/${remove.uri}`).update({ ...remove, action: new Date().getTime() });
             ref.child(`playlist/${song.uri}`).remove();
             resolve();
           });
@@ -253,23 +257,29 @@ export const SpotifyProvider = ({ children }) => {
   useEffect(() => {
     if (server) {
       serverRef.current = server;
-      database.ref(`playlists/${server}/playing`).on('value', (snapshot) => {
+      const ref = database.ref(`playlists/${server}`);
+      ref.child('playing').on('value', (snapshot) => {
         const value = snapshot.val();
         playingRef.current = value;
         setPlaying(() => value);
-        // }
       });
-      database.ref(`playlists/${server}/playlist`).on('value', (snapshot) => {
+      ref.child('playlist').on('value', (snapshot) => {
         const value = snapshot.val();
         const orderedPlaylist = orderBy(value, [(u) => Object.keys(u.votes || []).length, 'action'], ['desc', 'asc']);
-        console.log({ orderedPlaylist });
         playlistRef.current = orderedPlaylist;
         setPlaylist(() => orderedPlaylist || []);
       });
-
-      database.ref(`playlists/${server}/songLimit`).on('value', (snapshot) => {
+      ref.child('songLimit').on('value', (snapshot) => {
         const value = snapshot.val();
         setSongLimitValue(value || 1);
+      });
+
+      // return firebase.database().ref('myUsers').orderByChild("age").limitToLast(3);
+
+      ref.child('lastPlayed').on('value', (snapshot) => {
+        const value = snapshot.val();
+        const orderedPlayed = orderBy(value, ['action'], ['desc']).slice(0, 10);
+        setLastPlayed(orderedPlayed);
       });
     }
   }, [server, database, playingRef]);
@@ -285,6 +295,8 @@ export const SpotifyProvider = ({ children }) => {
       searchMusic,
       setSpotifyUser,
       songLimitValue,
+      updateSpotifyUser,
+      lastPlayed,
     }),
     [
       getAndUpdateToken,
@@ -296,6 +308,8 @@ export const SpotifyProvider = ({ children }) => {
       searchMusic,
       setSpotifyUser,
       songLimitValue,
+      updateSpotifyUser,
+      lastPlayed,
     ],
   );
 
