@@ -1,36 +1,34 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
-import { RiHeartLine, RiHeartFill, RiStarSLine } from 'react-icons/ri';
-import { Trans } from 'react-i18next';
+import { RiHeartLine, RiHeartFill, RiDeleteBin2Line } from 'react-icons/ri';
 
-const SwipeableListPlaylistElement = ({ element, addVote, user }) => {
+const SwipeableListPlaylistElement = ({
+  element, addVote, user, SwipeRight, RemSwipe, isMine,
+}) => {
   const votes = element.votes ? Object.keys(element.votes) : [];
   const nVotes = votes.length;
   const iVoted = votes.includes(user.uid);
-
-  console.log({ nVotes, iVoted });
-
-  const SwipeRight = memo(() => (
+  const VoteComp = memo(() => (
     <>
-      <RiStarSLine className="m-swipeable-item__favorite" />
-      <Trans>expandable.icon.favorites</Trans>
+      { iVoted ? <RiHeartFill className="m-swipeable-item__icon" />
+        : <RiHeartLine className="m-swipeable-item__icon" onClick={() => addVote(element)} />}
+      {nVotes > 0 && <span className="a-swipeable-item__voteBadge">{nVotes}</span>}
     </>
   ));
 
-  const SwipeLeft = memo(() => (
+  const DeleteComp = memo(() => (
     <>
-      <Trans>menu.search</Trans>
-      <RiHeartLine className="m-swipeable-item__addSong" />
+      <RiDeleteBin2Line className="m-swipeable-item__icon" onClick={() => addVote(element)} />
     </>
   ));
 
   return (
     <SwipeableListItem
-      swipeLeft={{
-        content: <SwipeLeft />,
+      swipeLeft={isMine ? {
+        content: <RemSwipe />,
         action: () => addVote(element),
-      }}
+      } : undefined}
       swipeRight={{
         content: <SwipeRight />,
         action: () => addVote(element),
@@ -45,9 +43,7 @@ const SwipeableListPlaylistElement = ({ element, addVote, user }) => {
             </span>
             <span className="a-swipeable-item__song">{element.name}</span>
           </div>
-          { iVoted ? <RiHeartFill className="m-swipeable-item__like" />
-            : <RiHeartLine className="m-swipeable-item__like" onClick={() => addVote(element)} />}
-          {nVotes > 0 && <span className="a-swipeable-item__voteBadge">{nVotes}</span>}
+          {!user.isAdmin ? <VoteComp /> : <DeleteComp />}
         </div>
       </div>
     </SwipeableListItem>
@@ -70,7 +66,11 @@ SwipeableListPlaylistElement.propTypes = {
   addVote: PropTypes.func.isRequired,
   user: PropTypes.shape({
     uid: PropTypes.string,
+    isAdmin: PropTypes.bool,
   }).isRequired,
+  SwipeRight: PropTypes.elementType.isRequired,
+  RemSwipe: PropTypes.elementType.isRequired,
+  isMine: PropTypes.bool.isRequired,
 };
 
 export default SwipeableListPlaylistElement;

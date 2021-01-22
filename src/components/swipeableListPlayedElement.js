@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
-import { RiAddCircleLine } from 'react-icons/ri';
 
-const SwipeableListSearchElement = ({ element, addAction, SwipeRight }) => (
+const SwipeableListPlayedElement = ({ element, SwipeRight }) => (
   <SwipeableListItem
     swipeRight={{
       content: <SwipeRight />,
-      action: () => addAction(element),
+      action: () => () => {},
     }}
   >
     <div className="m-swipeable-item__container__song">
@@ -19,13 +18,12 @@ const SwipeableListSearchElement = ({ element, addAction, SwipeRight }) => (
           </span>
           <span className="a-swipeable-item__song">{element.name}</span>
         </div>
-        <RiAddCircleLine className="m-swipeable-item__icon" onClick={() => addAction(element)} />
       </div>
     </div>
   </SwipeableListItem>
 );
 
-SwipeableListSearchElement.propTypes = {
+SwipeableListPlayedElement.propTypes = {
   element: PropTypes.shape({
     artist: PropTypes.shape({
       name: PropTypes.string,
@@ -37,8 +35,7 @@ SwipeableListSearchElement.propTypes = {
     }),
     name: PropTypes.string,
   }).isRequired,
-  addAction: PropTypes.func.isRequired,
   SwipeRight: PropTypes.elementType.isRequired,
 };
 
-export default SwipeableListSearchElement;
+export default SwipeableListPlayedElement;

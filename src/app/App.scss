@@ -140,3 +140,30 @@ code {
     from { transform: rotate(360deg); }
   }
 }
+
+.m-list__container{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.m-list__containerWaves{
+align-items: flex-end;
+justify-content: flex-end;
+display: flex;
+height: 4rem;
+transform: translateZ(0);
+margin-bottom: -2px;
+}
+.m-playlist__containerList{
+  padding-bottom: 1rem;
+}
+.m-serach__containerInput,
+.m-list__containerTitle{
+  padding: 1rem .5rem 3rem;
+}
+
+.m-list__containerTitle{
+  font-size: 3rem;
+  color: $text-color;
+}

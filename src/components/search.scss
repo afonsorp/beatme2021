@@ -1,33 +1,7 @@
 @import '../app/variables.scss';
 
-.m-serach__container{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.m-serach__containerInput{
-    padding: 1rem .5rem 3rem;
-}
-// .m-playlist__container{
-//     //flex:1;
-// }
-
-
-.m-serach__containerWaves{
-  align-items: flex-end;
-  justify-content: flex-end;
-  display: flex;
-  height: 4rem;
-  transform: translateZ(0);
-  margin-bottom: -2px;
-}
-.m-playlist__containerSearch{
-    padding-bottom: 1rem;
-}
-
 .a-searchForm__input{
-    font-size: 4rem;
+    font-size: 3rem;
     background-color: transparent;
     width: 100%;
     border: none;

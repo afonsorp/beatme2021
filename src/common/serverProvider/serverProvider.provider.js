@@ -43,7 +43,6 @@ export const ServerProvider = ({ children }) => {
   }, [database]);
 
   const setServerKey = useCallback((ip) => {
-    console.log({ ip });
     const resolveIp = isValidServer(ip) ? ip : false;
     setServerLoading(false);
     setInStorage(resolveIp);

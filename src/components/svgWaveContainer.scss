@@ -1,0 +1,19 @@
+@import '../app/variables.scss';
+.a-svg__waves{
+    position: fixed;
+    width: 600px;
+    z-index: -1;
+    &.-one{
+        fill:$play-back;
+        z-index: -1;
+    }
+    &.-two{
+        z-index: -2;
+        fill:$base-color-fade-md
+    }
+    &.-three{
+        z-index: -3;
+        fill:$base-color-fade-sm
+
+    }
+}

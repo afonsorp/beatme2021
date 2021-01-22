@@ -34,6 +34,7 @@
     "expandable.icon.delete":"delete",
     "expandable.icon.details":"details",
     "expandable.icon.favorites":"add to favorites",
+    "expandable.icon.remove.favorites":"remove from favorites",
     "MaxSong": "maximum number of songs a user can have, simultaneous, in a playlist (1-10)",
     "MaxSongError": "number must be between 1 and 10",
     "CheckBox": "select some of your favorite music genres",

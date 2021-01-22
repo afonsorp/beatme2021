@@ -6,12 +6,29 @@
     border-bottom: 1px solid $base-color-fade-md;
 }
 
-.m-swipeable-item__favorite,
-.m-swipeable-item__like,
-.m-swipeable-item__addSong{
-  font-size: 2rem;
-  cursor: pointer;
+.m-swipeable-item{
   color: $white-color;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 4px;
+  &.-yellow{
+    color: $yellow-color;
+  }
+  &.-red{
+    color: $red-color;
+  }
+  &.-right{
+    justify-content: flex-end;
+  }
+}
+
+.m-swipeable-item__icon{
+  font-size: 1.75rem;
+  cursor: pointer;
+}
+.m-swipeable-item__text{
+  margin: 0 0.5rem;
 }
 
 .m-swipeable-item__container__song{
@@ -36,17 +53,17 @@
         margin-left: 0.5rem;
         flex: 1;
       }
-      .a-swipeable-item__name{
-          font-size:0.875rem;
-          margin-bottom:0.2rem;
-      }
-      .a-swipeable-item__song{
-        font-size:1rem;
-      }
-      .m-swipeable-item__addSong{
-        font-size: 2rem;
-        cursor: pointer;
-      }
+      // .a-swipeable-item__name{
+      //     font-size:0.875rem;
+      //     margin-bottom:0.2rem;
+      // }
+      // .a-swipeable-item__song{
+      //   font-size:1rem;
+      // }
+      // .m-swipeable-item__addSong{
+      //   font-size: 2rem;
+      //   cursor: pointer;
+      // }
 }
 
 .a-swipeable-item__voteBadge{
@@ -54,8 +71,8 @@
   color: $base-color;
   border-radius: 50%;
   border: 1px solid $base-color;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.3rem;
+  height: 1.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -64,5 +81,3 @@
   right: 1rem;
   top: 0px;
 }
-
-

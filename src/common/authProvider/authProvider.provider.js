@@ -14,6 +14,7 @@ import Settings from '../../pages/settings';
 import AdminDetails from '../models/adminDetailsModel';
 import { useServer } from '../serverProvider/serverProvider.useServer';
 import SearchPage from '../../pages/search';
+import LastPlayed from '../../pages/lastPlayed';
 
 export const BASE_ROUTES = [
   {
@@ -55,19 +56,19 @@ const USER_ROUTES = [
   {
     path: '/last',
     label: 'menu.last.played',
-    component: <Settings />,
+    component: <LastPlayed />,
     showInMenu: true,
   },
   {
     path: '/top',
     label: 'menu.top.dj',
-    component: <Settings />,
+    component: <LastPlayed />,
     showInMenu: true,
   },
   {
     path: '/favorites',
     label: 'menu.favorites',
-    component: <Settings />,
+    component: <LastPlayed />,
     showInMenu: true,
   },
 ];
