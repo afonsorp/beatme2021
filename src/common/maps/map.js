@@ -64,21 +64,6 @@ const MapConfig = ({ location, setLocation }) => {
     }
   }, [location, moveInMap, formatAndSetLocation]);
 
-  //   useEffect(() => {
-  //     if (location.lat && location.lng) {
-  //       moveInMap(location);
-  //     } else {
-  //       navigator.geolocation.getCurrentPosition((loc) => {
-  //         const { latitude: lat, longitude: lng } = loc.coords;
-  //         const nPosition = {
-  //           lat,
-  //           lng,
-  //         };
-  //         moveInMap(nPosition);
-  //       }, (err) => console.error({ err }));
-  //     }
-  //   }, [map, location, moveInMap]);
-
   return (
     <MapContainer
       center={center}

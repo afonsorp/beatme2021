@@ -66,6 +66,12 @@ export const ActionsProvider = ({ children }) => {
     }
   }), [activateServer, getIpRequest, server]);
 
+  const addVote = useCallback((element) => {
+    database.ref(`playlists/${server}/playlist/${element.uri}/votes`).update({ [user.uid]: true }).catch(() => {
+      toast.error(t('notify.music.error'));
+    });
+  }, [database, server, user, t]);
+
   const addSongToPlaylist = useCallback((element) => {
     const isPlaying = playing && playing.uri === element.uri;
     const inPlaylist = !!(playlist
@@ -93,6 +99,7 @@ export const ActionsProvider = ({ children }) => {
     }
     if (inPlaylist) {
       toast.warning(t('notify.music.voted.playlist'));
+      addVote(element);
     }
     if (!insideLimit) {
       toast.warning(t('notify.music.song.limit'));
@@ -106,13 +113,8 @@ export const ActionsProvider = ({ children }) => {
     firestore,
     user,
     setLastSongFromUser,
+    addVote,
   ]);
-
-  const addVote = useCallback((element) => {
-    database.ref(`playlists/${server}/playlist/${element.uri}/votes`).update({ [user.uid]: true }).catch(() => {
-      toast.error(t('notify.music.error'));
-    });
-  }, [database, server, user, t]);
 
   const value = useMemo(
     () => ({

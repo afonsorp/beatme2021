@@ -171,7 +171,12 @@ export const ServerProvider = ({ children }) => {
       };
 
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(UserLocation, Failed);
+        const options = {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 600000,
+        };
+        navigator.geolocation.getCurrentPosition(UserLocation, Failed, options);
       } else {
         resolve(false);
       }
