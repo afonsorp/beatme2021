@@ -37,7 +37,7 @@ export const FirebaseProvider = ({ children }) => {
   const [googleAuthProvider, setGoogleAuthProvider] = useState();
   const [facebookAuthProvider, setFacebookAuthProvider] = useState();
   const [twitterAuthProvider, setTtwitterAuthProvider] = useState();
-
+  const [firebaseProject] = useState(Firebase);
   const value = useMemo(
     () => ({
       auth,
@@ -47,6 +47,7 @@ export const FirebaseProvider = ({ children }) => {
       googleAuthProvider,
       facebookAuthProvider,
       twitterAuthProvider,
+      firebaseProject,
     }),
     [
       auth,
@@ -56,6 +57,7 @@ export const FirebaseProvider = ({ children }) => {
       googleAuthProvider,
       facebookAuthProvider,
       twitterAuthProvider,
+      firebaseProject,
     ],
   );
 

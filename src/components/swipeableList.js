@@ -9,9 +9,10 @@ import { useAuth } from '../common/authProvider/authProvider.useAuth';
 import SwipeableSearchListComp from './swipeableListSearchElement';
 import SwipeablePlayListItemComp from './swipeableListPlaylistElement';
 import SwipeableListPlayedElement from './swipeableListPlayedElement';
-
+import SwipeableListTopDjElement from './swipeableListTopDjElement';
 import '@sandstreamdev/react-swipeable-list/dist/styles.css';
 import './swipeableList.scss';
+import SwipeableListFavoritesElement from './swipeableListFavoritesElement';
 
 export const LIST_TYPES = {
   SEARCH: 'search',
@@ -24,12 +25,14 @@ export const LIST_TYPES = {
 const SwipeableListComp = ({
   result, type,
 }) => {
-  const { addSongToPlaylist, addVote } = useActions();
+  const {
+    addSongToPlaylist, addVote, addToFavorites, removeFromFavorites, removeFromPlaylist,
+  } = useActions();
   const { user } = useAuth();
   const { t } = useTranslation();
   const isMine = useCallback((element) => element.owner.uid === user.uid, [user]);
   const isFavorite = useCallback((element) => (user.details.favorites
-    ? user.details.favorites.includes(element.uri)
+    ? Object.keys(user.details.favorites).includes(element.uri)
     : false), [user]);
 
   const FavSwipe = memo(({ isFav }) => (
@@ -49,58 +52,113 @@ const SwipeableListComp = ({
     </span>
   ));
 
-  const getSwipeableComponent = useCallback(() => {
+  const getSwipeableComponent = useCallback((rest) => {
     switch (type) {
       case LIST_TYPES.PLAYLIST:
-        return result.map((element) => (
-          <SwipeablePlayListItemComp
-            element={element}
-            key={element.uri}
-            addVote={addVote}
-            user={user}
-            id={element.uri}
-            SwipeRight={() => <FavSwipe isFav={isFavorite(element)} />}
-            RemSwipe={() => <RemSwipe />}
-            isMine={isMine(element)}
-          />
-        ));
+        return result.map((element) => {
+          const isInFavorite = isFavorite(element);
+          return (
+            <SwipeablePlayListItemComp
+              element={element}
+              key={element.uri}
+              addVote={addVote}
+              user={user}
+              id={element.uri}
+              SwipeRight={() => <FavSwipe isFav={isInFavorite} />}
+              addToFavorites={isInFavorite ? removeFromFavorites : addToFavorites}
+              RemSwipe={() => <RemSwipe />}
+              removeFromPlaylist={removeFromPlaylist}
+              isMine={isMine(element)}
+              {...rest}
+            />
+          );
+        });
       case LIST_TYPES.SEARCH:
-        return result.map((element) => (
-          <SwipeableSearchListComp
+        return result.map((element) => {
+          const isInFavorite = isFavorite(element);
+
+          return (
+            <SwipeableSearchListComp
+              element={element}
+              key={element.uri}
+              addAction={addSongToPlaylist}
+              id={element.uri}
+              SwipeRight={() => <FavSwipe isFav={isInFavorite} />}
+              addToFavorites={isInFavorite ? removeFromFavorites : addToFavorites}
+              {...rest}
+            />
+          );
+        });
+      case LIST_TYPES.LAST_PLAYED:
+        return result.map((element) => {
+          const isInFavorite = isFavorite(element);
+          return (
+            <SwipeableListPlayedElement
+              element={element}
+              key={element.uri}
+              id={element.uri}
+              SwipeRight={() => <FavSwipe isFav={isFavorite(element)} />}
+              addToFavorites={isInFavorite ? removeFromFavorites : addToFavorites}
+              {...rest}
+            />
+          );
+        });
+      case LIST_TYPES.TOP_DJ:
+        return result.map((element, index) => (
+          <SwipeableListTopDjElement
             element={element}
-            key={element.uri}
-            addAction={addSongToPlaylist}
-            id={element.uri}
-            SwipeRight={() => <FavSwipe isFav={isFavorite(element)} />}
+            key={element.uid}
+            id={element.uid}
+            position={index + 1}
+            {...rest}
           />
         ));
-      case LIST_TYPES.LAST_PLAYED:
+      case LIST_TYPES.FAVORITES:
         return result.map((element) => (
-          <SwipeableListPlayedElement
-            element={element}
-            key={element.uri}
-            id={element.uri}
-            SwipeRight={() => <FavSwipe isFav={isFavorite(element)} />}
-          />
+          <div key={element.group}>
+            <span className="m-swipeable-item__group"><strong>{element.group}</strong></span>
+            {element.children.map((song) => {
+              const isInFavorite = isFavorite(song);
+              return (
+                <SwipeableListFavoritesElement
+                  element={song}
+                  key={song.uri}
+                  id={song.uri}
+                  SwipeRight={() => <FavSwipe isFav={isFavorite(song)} />}
+                  addToFavorites={isInFavorite ? removeFromFavorites : addToFavorites}
+                  addAction={addSongToPlaylist}
+                  {...rest}
+                />
+              );
+            })}
+          </div>
         ));
       default:
         return null;
     }
-  }, [addSongToPlaylist, result, type, addVote, user, isFavorite, isMine]);
+  }, [addSongToPlaylist,
+    result,
+    type,
+    addVote,
+    user,
+    isFavorite,
+    isMine,
+    removeFromFavorites,
+    addToFavorites,
+    removeFromPlaylist]);
 
   return (
     <SwipeableList>
-      { getSwipeableComponent() }
+      {({ className, ...rest }) => (
+        getSwipeableComponent(rest)
+      )}
     </SwipeableList>
   );
 };
 
 SwipeableListComp.propTypes = {
   result: PropTypes.arrayOf(PropTypes.shape({})),
-  type: PropTypes.oneOf([LIST_TYPES.SEARCH,
-    LIST_TYPES.TOP_DJ,
-    LIST_TYPES.PLAYLIST,
-    LIST_TYPES.FAVORITES]),
+  type: PropTypes.oneOf(Object.keys(LIST_TYPES).map((t) => LIST_TYPES[t])),
 };
 
 SwipeableListComp.defaultProps = {

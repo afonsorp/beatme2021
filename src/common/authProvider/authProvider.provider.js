@@ -15,6 +15,8 @@ import AdminDetails from '../models/adminDetailsModel';
 import { useServer } from '../serverProvider/serverProvider.useServer';
 import SearchPage from '../../pages/search';
 import LastPlayed from '../../pages/lastPlayed';
+import TopDjPage from '../../pages/topDj';
+import Favorites from '../../pages/favorites';
 
 export const BASE_ROUTES = [
   {
@@ -62,13 +64,13 @@ const USER_ROUTES = [
   {
     path: '/top',
     label: 'menu.top.dj',
-    component: <LastPlayed />,
+    component: <TopDjPage />,
     showInMenu: true,
   },
   {
     path: '/favorites',
     label: 'menu.favorites',
-    component: <LastPlayed />,
+    component: <Favorites />,
     showInMenu: true,
   },
 ];
@@ -167,6 +169,7 @@ export const AuthProvider = ({ children }) => {
       handleFacebookLogin,
       handleTwitterLogin,
       setLastSongFromUser,
+      setUser,
     }),
     [
       loadingUser,
@@ -180,6 +183,7 @@ export const AuthProvider = ({ children }) => {
       handleFacebookLogin,
       handleTwitterLogin,
       setLastSongFromUser,
+      setUser,
     ],
   );
 

@@ -167,3 +167,25 @@ margin-bottom: -2px;
   font-size: 3rem;
   color: $text-color;
 }
+
+.Toastify__toast-body {
+  display: flex;
+  align-items: center;
+  .toast-text{
+    flex:1
+  }
+  .toast-button{
+    flex:1;
+    background-color: $base-color;
+    flex:none;
+    color: $white-color;
+    margin-right: 1rem;
+    padding: 0rem 1.5rem;
+    font-size: 0.875rem;
+    height: 2rem;
+  }
+}
+
+.Toastify__progress-bar--dark {
+  background: $base-color!important;
+}

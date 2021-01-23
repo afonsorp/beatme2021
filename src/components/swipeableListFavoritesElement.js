@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
+import { RiAddCircleLine } from 'react-icons/ri';
 
-const SwipeableListPlayedElement = ({ element, SwipeRight, addToFavorites }) => (
+const SwipeableListFavoritesElement = ({
+  element, addAction, SwipeRight, addToFavorites,
+}) => (
   <SwipeableListItem
     swipeRight={{
       content: <SwipeRight />,
@@ -18,12 +21,13 @@ const SwipeableListPlayedElement = ({ element, SwipeRight, addToFavorites }) => 
           </span>
           <span className="a-swipeable-item__song">{element.name}</span>
         </div>
+        <RiAddCircleLine className="m-swipeable-item__icon" onClick={() => addAction(element)} />
       </div>
     </div>
   </SwipeableListItem>
 );
 
-SwipeableListPlayedElement.propTypes = {
+SwipeableListFavoritesElement.propTypes = {
   element: PropTypes.shape({
     artist: PropTypes.shape({
       name: PropTypes.string,
@@ -35,8 +39,9 @@ SwipeableListPlayedElement.propTypes = {
     }),
     name: PropTypes.string,
   }).isRequired,
+  addAction: PropTypes.func.isRequired,
   SwipeRight: PropTypes.elementType.isRequired,
   addToFavorites: PropTypes.func.isRequired,
 };
 
-export default SwipeableListPlayedElement;
+export default SwipeableListFavoritesElement;

@@ -27,6 +27,14 @@
   font-size: 1.75rem;
   cursor: pointer;
 }
+
+.m-swipeable-item__group{
+  margin: 0 0.5rem;
+  color: #FFFFFF;
+  top: 0.1rem;
+  position: relative;
+  color: $white-color;
+}
 .m-swipeable-item__text{
   margin: 0 0.5rem;
 }
@@ -53,17 +61,6 @@
         margin-left: 0.5rem;
         flex: 1;
       }
-      // .a-swipeable-item__name{
-      //     font-size:0.875rem;
-      //     margin-bottom:0.2rem;
-      // }
-      // .a-swipeable-item__song{
-      //   font-size:1rem;
-      // }
-      // .m-swipeable-item__addSong{
-      //   font-size: 2rem;
-      //   cursor: pointer;
-      // }
 }
 
 .a-swipeable-item__voteBadge{
@@ -80,4 +77,20 @@
   position: absolute;
   right: 1rem;
   top: 0px;
+}
+
+.a-swipeable-item__score{
+  position: relative;
+  width: fit-content;
+  .m-swipeable-item__icon{
+    font-size: 1rem;
+    margin: 1px 0 0 5px;
+  }
+  .a-swipeable-item__voteBadge{
+    width: 1rem;
+    height: 1rem;
+    font-size: 0.5rem;
+    right: -0.6rem;
+    top: -0.3rem;
+  }
 }

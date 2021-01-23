@@ -14,7 +14,11 @@ class SongModel extends Model({
       position: 0,
       album: new AlbumModel(this.album).album,
       artist: new ArtistModel(this.artists[0]).artist,
-      owner: this.user,
+      owner: {
+        uid: this.user.uid,
+        name: this.user.name,
+        photoURL: this.user.photoURL,
+      },
     };
   }
 }

@@ -29,6 +29,7 @@ export const SpotifyProvider = ({ children }) => {
   const [playlist, setPlaylist] = useState([]);
   const [playing, setPlaying] = useState();
   const [lastPlayed, setLastPlayed] = useState([]);
+  const [topDj, setTopDj] = useState();
   const [songLimitValue, setSongLimitValue] = useState(1);
   const player = useRef();
   const user = useRef();
@@ -273,13 +274,15 @@ export const SpotifyProvider = ({ children }) => {
         const value = snapshot.val();
         setSongLimitValue(value || 1);
       });
-
-      // return firebase.database().ref('myUsers').orderByChild("age").limitToLast(3);
-
       ref.child('lastPlayed').on('value', (snapshot) => {
         const value = snapshot.val();
         const orderedPlayed = orderBy(value, ['action'], ['desc']).slice(0, 10);
         setLastPlayed(orderedPlayed);
+      });
+      ref.child('topDj').on('value', (snapshot) => {
+        const value = snapshot.val();
+        const orderedTop = orderBy(value, ['score'], ['desc']);
+        setTopDj(orderedTop);
       });
     }
   }, [server, database, playingRef]);
@@ -297,6 +300,7 @@ export const SpotifyProvider = ({ children }) => {
       songLimitValue,
       updateSpotifyUser,
       lastPlayed,
+      topDj,
     }),
     [
       getAndUpdateToken,
@@ -310,6 +314,7 @@ export const SpotifyProvider = ({ children }) => {
       songLimitValue,
       updateSpotifyUser,
       lastPlayed,
+      topDj,
     ],
   );
 

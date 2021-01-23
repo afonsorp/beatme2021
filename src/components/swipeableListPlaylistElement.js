@@ -4,7 +4,7 @@ import { SwipeableListItem } from '@sandstreamdev/react-swipeable-list';
 import { RiHeartLine, RiHeartFill, RiDeleteBin2Line } from 'react-icons/ri';
 
 const SwipeableListPlaylistElement = ({
-  element, addVote, user, SwipeRight, RemSwipe, isMine,
+  element, addVote, user, SwipeRight, RemSwipe, isMine, addToFavorites, removeFromPlaylist,
 }) => {
   const votes = element.votes ? Object.keys(element.votes) : [];
   const nVotes = votes.length;
@@ -27,11 +27,11 @@ const SwipeableListPlaylistElement = ({
     <SwipeableListItem
       swipeLeft={isMine ? {
         content: <RemSwipe />,
-        action: () => addVote(element),
+        action: () => removeFromPlaylist(element),
       } : undefined}
       swipeRight={{
         content: <SwipeRight />,
-        action: () => addVote(element),
+        action: () => addToFavorites(element),
       }}
     >
       <div className="m-swipeable-item__container__song">
@@ -71,6 +71,8 @@ SwipeableListPlaylistElement.propTypes = {
   SwipeRight: PropTypes.elementType.isRequired,
   RemSwipe: PropTypes.elementType.isRequired,
   isMine: PropTypes.bool.isRequired,
+  addToFavorites: PropTypes.func.isRequired,
+  removeFromPlaylist: PropTypes.func.isRequired,
 };
 
 export default SwipeableListPlaylistElement;

@@ -18,12 +18,13 @@ export const ActionsProvider = ({ children }) => {
   const {
     database,
     firestore,
+    firebaseProject,
   } = useFirebase();
   const { server, getIpRequest } = useServer();
   const {
     startPlaying, play: skip, playing, playlist, songLimitValue,
   } = useSpotify();
-  const { user, setLastSongFromUser } = useAuth();
+  const { user, setUser, setLastSongFromUser } = useAuth();
 
   const activateServer = useCallback((ip) => {
     const { lat, lng } = user.details.location;
@@ -66,9 +67,99 @@ export const ActionsProvider = ({ children }) => {
     }
   }), [activateServer, getIpRequest, server]);
 
+  const addToFavorites = useCallback((element) => {
+    const nSong = {
+      ...element,
+      votes: [],
+      owner: {
+        uid: user.uid,
+        name: user.name,
+        photoURL: user.photoURL,
+      },
+      action: null,
+      position: 0,
+    };
+    const ref = firestore.collection('users').doc(user.uid);
+    ref.set({
+      favorites: { [element.uri]: nSong },
+    }, { merge: true }).then(() => {
+      toast.dark(t('notify.music.to.favorites'));
+      ref.get().then((f) => {
+        const favorites = f.data() ? f.data().favorites : [];
+        setUser({
+          ...user,
+          details: {
+            ...user.details,
+            favorites,
+          },
+        });
+      });
+    });
+  }, [user, firestore, setUser, t]);
+
+  const removeFromFavorites = useCallback((element) => {
+    const remove = () => {
+      const ref = firestore.collection('users').doc(`${user.uid}`);
+      ref.get().then((doc) => {
+        doc.ref.update({
+          [`favorites.${element.uri}`]: firebaseProject.firestore.FieldValue.delete(),
+        }).then(() => {
+          toast.dark(t('notify.music.removed.favorites'));
+          ref.get().then((f) => {
+            const favorites = f.data() ? f.data().favorites : [];
+            setUser({
+              ...user,
+              details: {
+                ...user.details,
+                favorites,
+              },
+            });
+          });
+        });
+      });
+    };
+    toast.dark(
+      <>
+        <span className="toast-text">{t('notify.music.remove.fav')}</span>
+        <button className="button toast-button" type="button" onClick={remove}>{t('notify.music.remove.answer')}</button>
+      </>,
+    );
+  }, [user, firestore, firebaseProject, setUser, t]);
+
+  const removeFromPlaylist = useCallback((element) => {
+    const remove = () => {
+      const ref = database.ref(`playlists/${server}`);
+      ref.child(`/playlist/${element.uri}`).remove();
+      toast.dark(t('notify.music.removed'));
+    };
+    toast.dark(
+      <>
+        <span className="toast-text">{t('notify.music.remove')}</span>
+        <button className="button toast-button" type="button" onClick={remove}>{t('notify.music.remove.answer')}</button>
+      </>,
+    );
+  }, [database, server, t]);
+
   const addVote = useCallback((element) => {
-    database.ref(`playlists/${server}/playlist/${element.uri}/votes`).update({ [user.uid]: true }).catch(() => {
-      toast.error(t('notify.music.error'));
+    const ref = database.ref(`playlists/${server}`);
+    ref.child(`/playlist/${element.uri}/votes`).once('value', (snapshot) => {
+      const val = snapshot.val();
+      const value = val ? Object.keys(val) : [];
+      const hasVoteAlready = value ? value.includes(user.uid) : undefined;
+      if (!hasVoteAlready) {
+        ref.child(`/playlist/${element.uri}/votes`)
+          .update({ [user.uid]: true }).then(() => ref.child(`topDj/${element.owner.uid}`)
+            .transaction((current) => {
+              const score = current && current.score ? current.score + 1 : 1;
+              const nUser = {
+                ...element.owner,
+                score,
+              };
+              return nUser;
+            }).catch(() => {
+              toast.error(t('notify.music.error'));
+            }));
+      }
     });
   }, [database, server, user, t]);
 
@@ -89,7 +180,7 @@ export const ActionsProvider = ({ children }) => {
           lastSongByUser: song.uri,
         }, { merge: true });
         setLastSongFromUser(song.uri);
-        toast.success(t('notify.music.added.playlist'));
+        toast.dark(t('notify.music.added.playlist'));
       }).catch(() => {
         toast.error(t('notify.music.error'));
       });
@@ -123,6 +214,9 @@ export const ActionsProvider = ({ children }) => {
       skip,
       addSongToPlaylist,
       addVote,
+      addToFavorites,
+      removeFromFavorites,
+      removeFromPlaylist,
     }),
     [
       deactivateServer,
@@ -130,6 +224,9 @@ export const ActionsProvider = ({ children }) => {
       skip,
       addSongToPlaylist,
       addVote,
+      addToFavorites,
+      removeFromFavorites,
+      removeFromPlaylist,
     ],
   );
 
