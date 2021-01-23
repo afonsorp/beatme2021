@@ -116,7 +116,7 @@ const SwipeableListComp = ({
       case LIST_TYPES.FAVORITES:
         return result.map((element) => (
           <div key={element.group}>
-            <span className="m-swipeable-item__group"><strong>{element.group}</strong></span>
+            <div className="m-swipeable-item__group"><strong>{element.group}</strong></div>
             {element.children.map((song) => {
               const isInFavorite = isFavorite(song);
               return (

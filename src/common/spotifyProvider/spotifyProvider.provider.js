@@ -31,6 +31,7 @@ export const SpotifyProvider = ({ children }) => {
   const [lastPlayed, setLastPlayed] = useState([]);
   const [topDj, setTopDj] = useState();
   const [songLimitValue, setSongLimitValue] = useState(1);
+  const [tokenSpotify, setTokenSpotify] = useState();
   const player = useRef();
   const user = useRef();
   const deviceId = useRef();
@@ -54,6 +55,7 @@ export const SpotifyProvider = ({ children }) => {
         const { country, songLimit } = adminUser.details;
         token.current = accessToken;
         user.current = adminUser;
+        setTokenSpotify(accessToken);
         if (serverToUse) database.ref(`playlists/${serverToUse}`).update({ accessToken, country, songLimit });
         resolve(accessToken);
       }).catch(() => resolve(false));
@@ -64,12 +66,14 @@ export const SpotifyProvider = ({ children }) => {
     user.current = nUser;
   }, []);
 
-  const setSpotifyUser = useCallback((nUser) => {
+  const setSpotifyUser = useCallback(async (nUser) => {
     const serverToUse = server || serverRef.current;
     if (!serverToUse) return;
     let country = DEF_SPOTIFY_COUNTRY;
     if (nUser.isAdmin) {
       country = nUser.details.country;
+      user.current = nUser;
+      spotifyCountry.current = country;
     } else {
       database.ref(`playlists/${serverToUse}/country`).once('value', (snapshot) => {
         country = snapshot.val() ? snapshot.val() : DEF_SPOTIFY_COUNTRY;
@@ -77,10 +81,11 @@ export const SpotifyProvider = ({ children }) => {
       database.ref(`playlists/${serverToUse}/accessToken`).on('value', (snapshot) => {
         const spotifyToken = snapshot.val() ? snapshot.val() : undefined;
         token.current = spotifyToken || token.current;
+        user.current = nUser;
+        spotifyCountry.current = country;
+        setTokenSpotify(spotifyToken || token.current);
       });
     }
-    user.current = nUser;
-    spotifyCountry.current = country;
   }, [database, server]);
 
   const searchMusic = useCallback((search) => new Promise((resolve) => {
@@ -113,16 +118,7 @@ export const SpotifyProvider = ({ children }) => {
       });
   }), [user]);
 
-  const getRecommend = useCallback(() => new Promise((resolve) => {
-    const { current: adminUser } = user;
-    if (!adminUser) {
-      resolve(false);
-      return;
-    }
-    const { favGenres } = adminUser.details;
-    const genre = favGenres[Math.floor(Math.random() * favGenres.length)];
-    const seed = playing ? `seed_tracks=${playing.uri.replace('spotify:track:', '')}` : `seed_genres=${genre || 'ambient'}`;
-    const url = `${RECOMMENDATIONS_URL}?limit=1&${seed}&max_duration_ms=300000&market=${adminUser.details.country}`;
+  const getRecommend = useCallback((url) => new Promise((resolve) => {
     axios.get(url,
       {
         headers: {
@@ -131,8 +127,15 @@ export const SpotifyProvider = ({ children }) => {
         },
       })
       .then((response) => {
-        if (response.data.tracks) {
-          resolve(new SongModel({ ...response.data.tracks[0], user: user.current }).song);
+        if (response && response.data.tracks && response.data.tracks.items) {
+          resolve(response.data.tracks.items.map(
+            (m) => new SongModel({ ...m, user: user.current }).song,
+          ));
+        } else if (response && response.data && response.data.tracks) {
+          const result = response.data.tracks.length > 1
+            ? response.data.tracks.map((s) => new SongModel({ ...s, user: user.current }).song)
+            : new SongModel({ ...response.data.tracks[0], user: user.current }).song;
+          resolve(result);
         } else {
           resolve(false);
         }
@@ -141,7 +144,53 @@ export const SpotifyProvider = ({ children }) => {
         console.error(error);
         resolve(false);
       });
-  }), [playing, token]);
+  }), [token, user]);
+
+  const getRandomSearch = useCallback(() => {
+    const characters = 'abcdefghijklmnopqrstuvwxyz';
+    const randomCharacter = characters.charAt(Math.floor(Math.random() * characters.length));
+    let randomSearch = '';
+    switch (Math.round(Math.random())) {
+      case 0:
+        randomSearch = `${randomCharacter}`;
+        break;
+      case 1:
+        randomSearch = `*${randomCharacter}`;
+        break;
+      default:
+        break;
+    }
+
+    return randomSearch;
+  }, []);
+
+  const getUserRecommend = useCallback((userToUse) => new Promise((resolve) => {
+    const current = userToUse || user.current;
+    const { current: usableToken } = token;
+    if (!current || !usableToken) { resolve([]); return; }
+    const { lastSongByUser } = current.details;
+    let url = '';
+    if (lastSongByUser) {
+      const seed = `seed_tracks=${lastSongByUser.replace('spotify:track:', '')}`;
+      url = `${RECOMMENDATIONS_URL}?limit=5&${seed}&max_duration_ms=300000&market=${spotifyCountry.current}`;
+    } else {
+      url = `${SEARCH_URL}?limit=5&q=${getRandomSearch()}*&type=track&market=${spotifyCountry.current}`;
+    }
+    getRecommend(url).then(resolve);
+  }), [getRecommend, getRandomSearch, user, token]);
+
+  const getServerRecommend = useCallback(() => new Promise((resolve) => {
+    const { current: adminUser } = user;
+    if (!adminUser) {
+      resolve(false);
+      return;
+    }
+    const { favGenres } = adminUser.details;
+    const genre = favGenres[Math.floor(Math.random() * favGenres.length)];
+    const seed = playingRef.current ? `seed_tracks=${playingRef.current.uri.replace('spotify:track:', '')}` : `seed_genres=${genre || 'ambient'}`;
+    const url = `${RECOMMENDATIONS_URL}?limit=1&${seed}&max_duration_ms=300000&market=${spotifyCountry.current}`;
+    getRecommend(url).then(resolve);
+  }), [getRecommend, user]);
 
   const getSongToPlay = useCallback(({ ignorePlaying }) => new Promise((resolve) => {
     const { current: currentPlaying } = playingRef;
@@ -152,9 +201,9 @@ export const SpotifyProvider = ({ children }) => {
       resolve({ song: currentPlaylist[0], remove: currentPlaying });
       // getRecommend().then((song) => resolve(song));
     } else {
-      getRecommend().then((song) => resolve({ song, remove: currentPlaying }));
+      getServerRecommend().then((song) => resolve({ song, remove: currentPlaying }));
     }
-  }), [getRecommend]);
+  }), [getServerRecommend]);
 
   const play = useCallback(({ ignorePlaying }) => new Promise((resolve) => {
     getSongToPlay({ ignorePlaying }).then(({ song, remove }) => {
@@ -301,6 +350,8 @@ export const SpotifyProvider = ({ children }) => {
       updateSpotifyUser,
       lastPlayed,
       topDj,
+      getUserRecommend,
+      tokenSpotify,
     }),
     [
       getAndUpdateToken,
@@ -315,6 +366,8 @@ export const SpotifyProvider = ({ children }) => {
       updateSpotifyUser,
       lastPlayed,
       topDj,
+      getUserRecommend,
+      tokenSpotify,
     ],
   );
 

@@ -22,7 +22,7 @@ export default function BasicExample() {
             <AuthProvider>
               <ActionsProvider>
                 <BeatmeRouter />
-                <ToastContainer autoClose={1000000000000} />
+                <ToastContainer position="top-center" />
               </ActionsProvider>
             </AuthProvider>
           </SpotifyProvider>

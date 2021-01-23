@@ -19,7 +19,7 @@ const SwipeableListPlaylistElement = ({
 
   const DeleteComp = memo(() => (
     <>
-      <RiDeleteBin2Line className="m-swipeable-item__icon" onClick={() => addVote(element)} />
+      <RiDeleteBin2Line className="m-swipeable-item__icon" onClick={() => removeFromPlaylist(element)} />
     </>
   ));
 
