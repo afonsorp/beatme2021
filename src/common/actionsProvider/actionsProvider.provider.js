@@ -169,7 +169,7 @@ export const ActionsProvider = ({ children }) => {
       && playlist.length
       && playlist.find((e) => e.uri === element.uri));
     const myPlaylist = playlist.filter((e) => e.owner.uid === element.owner.uid);
-    const insideLimit = myPlaylist ? myPlaylist.length <= parseInt(songLimitValue, 10) : true;
+    const insideLimit = myPlaylist ? myPlaylist.length < parseInt(songLimitValue, 10) : true;
     const song = {
       ...element,
       action: new Date().toISOString(),

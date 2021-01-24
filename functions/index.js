@@ -6,20 +6,20 @@
 // });
 
 // PROD
-// const REDIRECT_URL = 'https://beatme2021-5a5b1.web.app/redirect.html';
-// const COOKIES_OPTIONS = {
-//   maxAge: 3600000, httpOnly: false, secure: true, sameSite: 'none',
-// };
-//
-
-// DEV
-const REDIRECT_URL = 'http://localhost:3000/redirect.html';
+const REDIRECT_URL = 'https://beatme.pt/redirect.html';
 const COOKIES_OPTIONS = {
-  maxAge: 3600000, httpOnly: true, secure: false,
+  maxAge: 3600000, httpOnly: true, secure: true, sameSite: 'none',
 };
 //
 
-const corsWhitelist = ['http://localhost:3000', 'https://beatme2021-5a5b1.web.app'];
+// DEV
+// const REDIRECT_URL = 'http://localhost:3000/redirect.html';
+// const COOKIES_OPTIONS = {
+//   maxAge: 3600000, httpOnly: true, secure: false,
+// };
+//
+
+const corsWhitelist = ['http://localhost:3000', 'https://beatme.pt'];
 
 const functions = require('firebase-functions');
 const cors = require('cors')({

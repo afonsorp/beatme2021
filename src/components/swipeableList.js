@@ -10,9 +10,9 @@ import SwipeableSearchListComp from './swipeableListSearchElement';
 import SwipeablePlayListItemComp from './swipeableListPlaylistElement';
 import SwipeableListPlayedElement from './swipeableListPlayedElement';
 import SwipeableListTopDjElement from './swipeableListTopDjElement';
+import SwipeableListFavoritesElement from './swipeableListFavoritesElement';
 import '@sandstreamdev/react-swipeable-list/dist/styles.css';
 import './swipeableList.scss';
-import SwipeableListFavoritesElement from './swipeableListFavoritesElement';
 
 export const LIST_TYPES = {
   SEARCH: 'search',
@@ -76,7 +76,6 @@ const SwipeableListComp = ({
       case LIST_TYPES.SEARCH:
         return result.map((element) => {
           const isInFavorite = isFavorite(element);
-
           return (
             <SwipeableSearchListComp
               element={element}
@@ -149,7 +148,7 @@ const SwipeableListComp = ({
 
   return (
     <SwipeableList>
-      {({ className, ...rest }) => (
+      {({ ...rest }) => (
         getSwipeableComponent(rest)
       )}
     </SwipeableList>

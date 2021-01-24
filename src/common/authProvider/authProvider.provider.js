@@ -2,6 +2,7 @@ import React, {
   useMemo, useState, useEffect, useCallback,
 } from 'react';
 import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import AuthContext from './authProvider.context';
@@ -17,6 +18,7 @@ import SearchPage from '../../pages/search';
 import LastPlayed from '../../pages/lastPlayed';
 import TopDjPage from '../../pages/topDj';
 import Favorites from '../../pages/favorites';
+import QRCode from '../../pages/qrCode';
 
 export const BASE_ROUTES = [
   {
@@ -46,6 +48,13 @@ const ADMIN_ROUTES = [
     component: <Settings />,
     showInMenu: true,
   },
+  {
+    path: '/link',
+    label: 'menu.link',
+    component: <QRCode />,
+    showInMenu: true,
+  },
+
 ];
 
 const USER_ROUTES = [
@@ -102,9 +111,10 @@ export const AuthProvider = ({ children }) => {
       database.ref(`servers/${server}`).update({ ...nUser.details.location });
       database.ref(`playlists/${server}`).update({ songLimit: nUser.details.songLimit });
     }
+    toast.dark(t('notify.config.save'));
     history.push('/');
     setLoadingUser(false);
-  }, [user, firestore, database, server, history]);
+  }, [user, firestore, database, server, history, t]);
 
   const logout = useCallback(() => {
     setLoadingUser(true);

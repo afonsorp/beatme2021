@@ -1,4 +1,6 @@
-import React, { useCallback, useRef, useEffect } from 'react';
+import React, {
+  useCallback, useRef, useEffect, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +13,7 @@ const SearchForm = ({ setResult, setIsSuggestion, isSuggestion }) => {
   } = useSpotify();
   const { user } = useAuth();
   const { t } = useTranslation();
+  const [favs, setFavs] = useState();
   const musicRef = useRef();
   const { register } = useForm({
     mode: 'onChange',
@@ -18,9 +21,12 @@ const SearchForm = ({ setResult, setIsSuggestion, isSuggestion }) => {
   });
 
   const handleSuggestion = useCallback(() => {
-    if (user && tokenSpotify) {
+    if (user.uid && tokenSpotify) {
       setIsSuggestion(true);
-      getUserRecommend(user).then(setResult);
+      getUserRecommend(user).then((favorites) => {
+        setResult(favorites);
+        setFavs(favorites);
+      });
     }
   }, [user, tokenSpotify, getUserRecommend, setIsSuggestion, setResult]);
 
@@ -49,8 +55,8 @@ const SearchForm = ({ setResult, setIsSuggestion, isSuggestion }) => {
   }, [register]);
 
   useEffect(() => {
-    handleSuggestion();
-  }, [handleSuggestion]);
+    if (!favs) handleSuggestion();
+  }, [handleSuggestion, favs]);
 
   return (
     <form onChange={handleSubmit} onSubmit={handleSubmit}>

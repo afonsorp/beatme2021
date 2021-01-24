@@ -11,6 +11,7 @@
     "menu.welcome": "welcome",
     "menu.home": "home",
     "menu.settings": "settings",
+    "menu.link": "direct link",
     "menu.search": "add songs",
     "menu.favorites": "favorites",
     "menu.last.played": "played earlier",
@@ -23,6 +24,7 @@
     "search.results.suggestions": "suggestions for you",
     "search.form.input": "search",
     "notify.music.removed": "music removed from playlist",
+    "notify.config.save": "configurations saved",
     "notify.music.to.favorites": "music added to your favorites",
     "notify.music.removed.favorites": "music removed from your favorites",
     "notify.music.added.playlist": "music added to playlist",
@@ -41,5 +43,6 @@
     "MaxSong": "maximum number of songs a user can have, simultaneous, in a playlist (1-10)",
     "MaxSongError": "number must be between 1 and 10",
     "CheckBox": "select some of your favorite music genres",
-    "location": "select the beatme position on the map"
+    "location": "select the beatme position on the map",
+    "direct.link.details":"if someone can't connect to your server, you can try reading the QR code and access directly"
 }

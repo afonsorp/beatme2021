@@ -60,4 +60,7 @@
     &.selected{
         color:$base-color;
     }
+    &:focus, &:hover, &:visited, &:link, &:active {
+        text-decoration: none;
+    }
 }

@@ -20,7 +20,8 @@
 }
 
 .m-login-top__container {
-  height: 50% !important;
+  // height: 50% !important;
+  flex:1;
   position: relative;
   overflow: hidden;
   .image {
@@ -36,7 +37,7 @@
 }
 
 .m-login-bottom__container{
-  height: 50%;
+  flex:1;
   text-align: center;
     display: flex;
     flex-direction: column;
