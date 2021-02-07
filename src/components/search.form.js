@@ -39,7 +39,6 @@ const SearchForm = ({ setResult, setIsSuggestion, isSuggestion }) => {
     } else if (!isSuggestion) {
       handleSuggestion();
     }
-    // console.log({ value });
   }, [searchMusic, setResult, setIsSuggestion, isSuggestion, handleSuggestion]);
 
   const registerRef = useCallback((e) => {

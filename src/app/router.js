@@ -66,6 +66,7 @@ PrivateRoute.propTypes = {
 
 const BeatmeRouter = () => {
   const { authRoutes } = useAuth();
+
   return (
     <>
       <Switch>

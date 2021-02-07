@@ -57,15 +57,17 @@
     text-decoration: none;
     width: 100%;
     text-align: left;
+    background-color: transparent;
     -webkit-tap-highlight-color: transparent;
     &.selected{
         text-decoration: none;
         color:$base-color;
+        background-color: transparent;
         -webkit-tap-highlight-color: transparent;
     }
     &:focus, &:hover, &:visited, &:link, &:active {
         text-decoration: none;
-        background-color: $white-color;
+        background-color: transparent;
         -webkit-tap-highlight-color: transparent;
     }
 }

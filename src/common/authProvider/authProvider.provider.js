@@ -1,5 +1,5 @@
 import React, {
-  useMemo, useState, useEffect, useCallback,
+  useMemo, useState, useEffect, useCallback, useRef,
 } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -86,7 +86,7 @@ const USER_ROUTES = [
 
 export const AuthProvider = ({ children }) => {
   const { t } = useTranslation();
-  const { server } = useServer();
+  const { server, playerServer } = useServer();
   const {
     auth,
     firestore,
@@ -100,6 +100,7 @@ export const AuthProvider = ({ children }) => {
   const [loadingUser, setLoadingUser] = useState(true);
   const [user, setUser] = useState();
   const [authRoutes, setAuthRoutes] = useState([]);
+  const tokenInterval = useRef();
 
   const updateAdmin = useCallback((configs) => {
     setLoadingUser(true);
@@ -119,7 +120,7 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(() => {
     setLoadingUser(true);
     auth.signOut().then(() => {
-      setUser(undefined);
+      setUser();
       setAuthRoutes([]);
       setLoadingUser(false);
       history.push('/login');
@@ -231,11 +232,12 @@ export const AuthProvider = ({ children }) => {
           getAndUpdateToken(userModel).then((token) => {
             if (token) {
               setUser(userModel);
-              setInterval(() => {
-                getAndUpdateToken(userModel).then(() => console.info('Token Refreshed'));
-              }, 3300000);
-            } else {
-              setUser(false);
+              if (tokenInterval.current) clearInterval(tokenInterval.current);
+              tokenInterval.current = setInterval(() => {
+                getAndUpdateToken(userModel).then((r) => {
+                  if (r) console.info('Token Refreshed');
+                });
+              }, 10 * 60 * 1000);
             }
             setLoadingUser(false);
           });
@@ -245,7 +247,7 @@ export const AuthProvider = ({ children }) => {
         }
       });
     });
-  }, [auth, getAndUpdateToken, authStateChange]);
+  }, [auth, getAndUpdateToken, authStateChange, server, playerServer]);
 
   return (
     <AuthContext.Provider value={value}>

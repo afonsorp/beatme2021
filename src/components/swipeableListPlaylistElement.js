@@ -11,9 +11,9 @@ const SwipeableListPlaylistElement = ({
   const iVoted = votes.includes(user.uid);
   const VoteComp = memo(() => (
     <>
+      {nVotes > 0 && <span className="a-swipeable-item__voteBadge">{nVotes}</span>}
       { iVoted ? <RiHeartFill className="m-swipeable-item__icon" />
         : <RiHeartLine className="m-swipeable-item__icon" onClick={() => addVote(element)} />}
-      {nVotes > 0 && <span className="a-swipeable-item__voteBadge">{nVotes}</span>}
     </>
   ));
 
@@ -36,12 +36,12 @@ const SwipeableListPlaylistElement = ({
     >
       <div className="m-swipeable-item__container__song">
         <div className="m-swipeable-item__infoContainer">
-          <img src={element.album.avatarImage.url} alt="Avatar" className="avatar" />
+          <img src={element.owner.photoURL} alt="Avatar" className="avatar" />
           <div className="m-swipeable-item__info">
             <span className="a-swipeable-item__name">
-              {element.artist.name}
+              {element.owner.name}
             </span>
-            <span className="a-swipeable-item__song">{element.name}</span>
+            <span className="a-swipeable-item__song">{`${element.artist.name} - ${element.name}`}</span>
           </div>
           {!user.isAdmin ? <VoteComp /> : <DeleteComp />}
         </div>
@@ -52,6 +52,10 @@ const SwipeableListPlaylistElement = ({
 
 SwipeableListPlaylistElement.propTypes = {
   element: PropTypes.shape({
+    owner: PropTypes.shape({
+      name: PropTypes.string,
+      photoURL: PropTypes.string,
+    }),
     votes: PropTypes.shape({}),
     artist: PropTypes.shape({
       name: PropTypes.string,
@@ -67,6 +71,8 @@ SwipeableListPlaylistElement.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string,
     isAdmin: PropTypes.bool,
+    photoURL: PropTypes.string,
+    name: PropTypes.string,
   }).isRequired,
   SwipeRight: PropTypes.elementType.isRequired,
   RemSwipe: PropTypes.elementType.isRequired,

@@ -187,10 +187,12 @@ export const ActionsProvider = ({ children }) => {
     }
     if (isPlaying) {
       toast.warning(t('notify.music.playing'));
+      return;
     }
     if (inPlaylist) {
       toast.warning(t('notify.music.voted.playlist'));
       addVote(element);
+      return;
     }
     if (!insideLimit) {
       toast.warning(t('notify.music.song.limit'));

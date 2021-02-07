@@ -25,7 +25,7 @@ export const DEF_SPOTIFY_COUNTRY = 'PT';
 
 export const SpotifyProvider = ({ children }) => {
   const { functions, database } = useFirebase();
-  const { server } = useServer();
+  const { server, playerServer } = useServer();
   const [playlist, setPlaylist] = useState([]);
   const [playing, setPlaying] = useState();
   const [lastPlayed, setLastPlayed] = useState([]);
@@ -43,24 +43,46 @@ export const SpotifyProvider = ({ children }) => {
   const playlistRef = useRef(playlist);
   const positionRef = useRef();
   const axiosRequest = useRef();
+  const gettingToken = useRef();
+  const lastTokenTime = useRef();
+
+  const setTokenNeeded = useCallback((nToken) => {
+    if (nToken) {
+      token.current = nToken;
+      setTokenSpotify(nToken);
+    }
+  }, []);
 
   const getAndUpdateToken = useCallback((adminUser) => new Promise((resolve) => {
-    if (!adminUser.isAdmin) {
-      resolve();
+    if (!adminUser.isAdmin || gettingToken.current) {
+      resolve(false);
     } else {
-      const serverToUse = server || serverRef.current;
-      const getSpotifyToken = functions.httpsCallable('refreshSpotifyToken');
-      getSpotifyToken({ userId: adminUser.email }).then((result) => {
-        const { accessToken } = result.data;
-        const { country, songLimit } = adminUser.details;
-        token.current = accessToken;
-        user.current = adminUser;
-        setTokenSpotify(accessToken);
-        if (serverToUse) database.ref(`playlists/${serverToUse}`).update({ accessToken, country, songLimit });
-        resolve(accessToken);
-      }).catch(() => resolve(false));
+      gettingToken.current = true;
+      const serverToUse = server || serverRef.current || playerServer;
+      const DIFFERENCE = 45 * 60 * 1000;
+      const newDate = new Date();
+      const { current: lastDateDate } = lastTokenTime;
+      const isTime = (newDate - lastDateDate) > DIFFERENCE;
+      if (isTime || (!token.current && serverToUse)) {
+        const getSpotifyToken = functions.httpsCallable('refreshSpotifyToken');
+        getSpotifyToken({ userId: adminUser.email }).then((result) => {
+          const { accessToken } = result.data;
+          const { country, songLimit } = adminUser.details;
+          user.current = adminUser;
+          setTokenNeeded(accessToken);
+          lastTokenTime.current = new Date();
+          if (serverToUse) database.ref(`playlists/${serverToUse}`).update({ accessToken, country, songLimit });
+          setTimeout(() => {
+            gettingToken.current = false;
+          }, 10000);
+          resolve(accessToken);
+        }).catch(() => resolve(false));
+      } else {
+        gettingToken.current = false;
+        resolve(false);
+      }
     }
-  }), [functions, database, server]);
+  }), [functions, database, server, setTokenNeeded, serverRef, playerServer]);
 
   const updateSpotifyUser = useCallback((nUser) => {
     user.current = nUser;
@@ -80,13 +102,12 @@ export const SpotifyProvider = ({ children }) => {
       });
       database.ref(`playlists/${serverToUse}/accessToken`).on('value', (snapshot) => {
         const spotifyToken = snapshot.val() ? snapshot.val() : undefined;
-        token.current = spotifyToken || token.current;
         user.current = nUser;
         spotifyCountry.current = country;
-        setTokenSpotify(spotifyToken || token.current);
+        setTokenNeeded(spotifyToken || token.current);
       });
     }
-  }, [database, server]);
+  }, [database, server, setTokenNeeded]);
 
   const searchMusic = useCallback((search) => new Promise((resolve) => {
     if (axiosRequest.current) {
@@ -116,7 +137,7 @@ export const SpotifyProvider = ({ children }) => {
         console.error({ error });
         resolve([]);
       });
-  }), [user]);
+  }), [user, tokenSpotify, token]);
 
   const getRecommend = useCallback((url) => new Promise((resolve) => {
     axios.get(url,
@@ -245,12 +266,7 @@ export const SpotifyProvider = ({ children }) => {
   const startPlaying = useCallback(() => {
     // const token = '[My Spotify Web API access token]';
     const { current } = player;
-
-    if (current) {
-      current.connect();
-      return;
-    }
-    const nPlayer = new window.Spotify.Player({
+    const nPlayer = current || new window.Spotify.Player({
       name: 'Beatme Player',
       getOAuthToken: (cb) => {
         cb(token.current);
@@ -270,7 +286,9 @@ export const SpotifyProvider = ({ children }) => {
         changing.current = true;
         play({ ignorePlaying: true }).then(() => {
           database.ref(`playlists/${serverRef.current}`).update({ action: new Date() }).then(() => {
-            changing.current = false;
+            setTimeout(() => {
+              changing.current = false;
+            }, 5000);
           });
         });
       }

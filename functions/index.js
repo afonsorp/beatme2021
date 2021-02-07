@@ -22,10 +22,11 @@ const COOKIES_OPTIONS = {
 const corsWhitelist = ['http://localhost:3000', 'https://beatme.pt'];
 
 const functions = require('firebase-functions');
+
 const cors = require('cors')({
   origin(origin, callback) {
     const allow = /.*\.beatme.pt/.test(origin) || corsWhitelist.indexOf(origin) !== -1;
-    callback(null, allow);
+    callback(null, { origin: allow, credentials: true });
   },
 });
 const crypto = require('crypto');
@@ -43,7 +44,13 @@ admin.initializeApp({
   databaseURL: `https://${process.env.GCLOUD_PROJECT}.firebaseio.com`,
 });
 
+const firebaseDefault = admin.initializeApp(functions.config().firebase, 'other');
+
+// const firestore = admin.firestore();
+
 const firestore = admin.firestore();
+const auth = admin.auth();
+const database = firebaseDefault.database();
 
 const OAUTH_SCOPES = ['streaming', 'user-read-birthdate', 'user-read-email', 'user-read-private', 'user-read-playback-state', 'user-modify-playback-state'];
 
@@ -106,12 +113,11 @@ exports.getIp = functions.https.onRequest((req, res) => {
 exports.redirect = functions.https.onRequest((req, res) => {
   cookieParser()(req, res, () => {
     const state = req.cookies.state || crypto.randomBytes(20).toString('hex');
-    // console.log('Setting verification state:', state);
-
-    // const s = body.exp.toUTCString();
-    res.cookie('state', state.toString(), COOKIES_OPTIONS);
-    const authorizeURL = Spotify.createAuthorizeURL(OAUTH_SCOPES, state.toString());
-    res.redirect(authorizeURL);
+    database.ref(`auth/${state}`).set(state).then(() => {
+      res.cookie('state', state.toString(), COOKIES_OPTIONS);
+      const authorizeURL = Spotify.createAuthorizeURL(OAUTH_SCOPES, state.toString());
+      res.redirect(authorizeURL);
+    });
   });
 });
 
@@ -161,7 +167,7 @@ function createFirebaseAccount(
   // const databaseTask = admin.database().ref(`/spotifyAccessToken/${uid}`).set(accessToken);
 
   // Create or update the user account.
-  const userCreationTask = admin.auth().updateUser(uid, {
+  const userCreationTask = auth.updateUser(uid, {
     displayName,
     photoURL,
     email,
@@ -169,7 +175,7 @@ function createFirebaseAccount(
   }).catch((error) => {
     // If user does not exists we create it.
     if (error.code === 'auth/user-not-found') {
-      return admin.auth().createUser({
+      return auth.createUser({
         uid,
         displayName,
         photoURL,
@@ -183,7 +189,7 @@ function createFirebaseAccount(
   // Wait for all async tasks to complete, then generate and return a custom auth token.
   Await([userCreationTask]);
   // Create a Firebase custom auth token.
-  const token = Await(admin.auth().createCustomToken(uid));
+  const token = Await(auth.createCustomToken(uid));
   // console.log('Created Custom token for UID "', uid, '" Token:', token);
   return token;
 }
@@ -197,54 +203,79 @@ function createFirebaseAccount(
 exports.token = functions.https.onRequest((req, res) => {
   try {
     cookieParser()(req, res, () => {
-      console.log('Received verification state:', req.cookies.state);
-      console.log('Received state:', req.query.state);
-
-      if (!req.cookies.state) {
-        console.error('State cookie not set or expired. Maybe you took too long to authorize. Please try again.');
-        throw new Error('State cookie not set or expired. Maybe you took too long to authorize. Please try again.');
-      } else if (req.cookies.state !== req.query.state) {
-        // console.error('State validation failed');
-        throw new Error('State validation failed');
-      }
-      // console.log('Received auth code:', req.query.code);
-      Spotify.authorizationCodeGrant(req.query.code, (error, data) => {
-        if (error) {
-          throw error;
+      const queryState = req.query.state;
+      console.log('Received verification state:', queryState);
+      let cookieState = req.cookies.state;
+      database.ref(`auth/${queryState}`).once('value', (snapshot) => {
+        cookieState = cookieState || snapshot.val();
+        console.log('Received state:', cookieState);
+        if (!cookieState) {
+          console.error('State cookie not set or expired. Maybe you took too long to authorize. Please try again.');
+          throw new Error('State cookie not set or expired. Maybe you took too long to authorize. Please try again.');
+        } else if (cookieState !== queryState) {
+          // console.error('State validation failed');
+          throw new Error('State validation failed');
         }
-        // console.log('Received Access Token:', data.body.access_token);
-        Spotify.setAccessToken(data.body.access_token);
-        Spotify.getMe((Async((getMeError, userResults) => {
-          if (getMeError) {
-            throw getMeError;
+        // console.log('Received auth code:', req.query.code);
+        Spotify.authorizationCodeGrant(req.query.code, (error, data) => {
+          if (error) {
+            throw error;
           }
-          // console.log('Auth code exchange result received:', userResults);
-          // We have a Spotify access token and the user identity now.
-          const accessToken = data.body.access_token;
-          const spotifyUserID = userResults.body.id;
-          const { email } = userResults.body;
-          const profilePic = (userResults.body.images[0].url) ? userResults.body.images[0].url
-            : 'https://www.w3schools.com/howto/img_avatar.png';
-          const userName = (userResults.body.display_name) ? userResults.body.display_name : email;
-          const refreshToken = data.body.refresh_token;
-          const { country } = userResults.body;
-          // Create a Firebase account and get the Custom Auth Token.
-          const firebaseToken = Await(createFirebaseAccount({
-            spotifyUserID,
-            userName,
-            profilePic,
-            email,
-            accessToken,
-            refreshToken,
-            country,
-          }));
-          // Serve an HTML page that signs the user in and updates the user profile.
-          res.jsonp({ token: firebaseToken });
-        })));
+          // console.log('Received Access Token:', data.body.access_token);
+          Spotify.setAccessToken(data.body.access_token);
+          Spotify.getMe((Async((getMeError, userResults) => {
+            if (getMeError) {
+              throw getMeError;
+            }
+            // console.log('Auth code exchange result received:', userResults);
+            // We have a Spotify access token and the user identity now.
+            const accessToken = data.body.access_token;
+            const spotifyUserID = userResults.body.id;
+            const { email } = userResults.body;
+            const profilePic = (userResults.body.images[0].url) ? userResults.body.images[0].url
+              : 'https://www.w3schools.com/howto/img_avatar.png';
+            const userName = (userResults.body.display_name)
+              ? userResults.body.display_name
+              : email;
+            const refreshToken = data.body.refresh_token;
+            const { country } = userResults.body;
+            // Create a Firebase account and get the Custom Auth Token.
+            const firebaseToken = Await(createFirebaseAccount({
+              spotifyUserID,
+              userName,
+              profilePic,
+              email,
+              accessToken,
+              refreshToken,
+              country,
+            }));
+            // Serve an HTML page that signs the user in and updates the user profile.
+            res.jsonp({ token: firebaseToken });
+          })));
+        });
+        database.ref(`auth/${queryState}`).remove();
       });
     });
   } catch (error) {
     return res.jsonp({ error: error.toString });
   }
   return null;
+});
+
+exports.hourlyWork = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    database.ref('/servers').once('value', (dataSnapshot) => {
+      if (dataSnapshot.exists()) {
+        dataSnapshot.forEach((serverSnap) => {
+          const server = serverSnap.val() || { active: false };
+          if (!server.active) {
+            const ip = serverSnap.key;
+            serverSnap.ref.remove();
+            database.ref(`/playlists/${ip}`).remove();
+          }
+        });
+      }
+    }).then(() => res.json({ success: true }))
+      .catch((error) => res.status(500).send(error));
+  });
 });

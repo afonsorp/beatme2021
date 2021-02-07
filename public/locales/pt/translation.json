@@ -44,5 +44,6 @@
     "MaxSongError": "número entre 1 e 10",
     "CheckBox": "escolha alguns dos seus género músicais favoritos",
     "location":"escolha, no mapa, a zona aproximada onde o beatme se encontra",
+    "config.submit": "guardar",
     "direct.link.details":"se não se conseguirem ligar a este dispositivo, podes tentar ler o código e aceder directamente através do link"
 }

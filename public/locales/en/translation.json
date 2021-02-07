@@ -44,5 +44,6 @@
     "MaxSongError": "number must be between 1 and 10",
     "CheckBox": "select some of your favorite music genres",
     "location": "select the beatme position on the map",
+    "config.submit": "submit",
     "direct.link.details":"if someone can't connect to your server, you can try reading the QR code and access directly"
 }

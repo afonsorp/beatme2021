@@ -1,12 +1,9 @@
-/* eslint-disable max-len */
 import React, { useCallback, useState } from 'react';
 import classnames from 'classnames';
 import { RiPlayCircleLine, RiSkipForwardLine, RiPlayListAddLine } from 'react-icons/ri';
 import { useTranslation } from 'react-i18next';
-// import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import CircularAlbumContainer from './circularAlbumContainer';
-// import Pablo from '../images/pablo_aimar.jpg';
 import './songExposer.scss';
 import { useAuth } from '../common/authProvider/authProvider.useAuth';
 import { useServer } from '../common/serverProvider/serverProvider.useServer';

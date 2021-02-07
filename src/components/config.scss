@@ -54,13 +54,14 @@
       background-color:$base-color-fade-sm;
     }
   }
-}
-
-.a-config-form__button{
-  float: right;
-  margin: 0;
-  margin: 0 0 1rem 0;
-  padding: 0.5rem 1rem;
+  .a-config-form__button{
+    float: right;
+    margin: 0;
+    margin: 0 0 1rem 0;
+    padding: 0.5rem 1rem;
+    color:$white-color;
+    background-color: $base-color;
+  }
 }
 
 input[type='checkbox'],

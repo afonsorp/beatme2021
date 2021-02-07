@@ -94,53 +94,6 @@ code {
   margin-right: 0.5rem;
 }
 
-// .m-playlist__container,
-// .m-playlist__container__list,
-.m-login-top__container {
-  .wave {
-    opacity: .8;
-    position: absolute;
-    top: 3%;
-    left: 50%;
-    background: $base-color;
-    width: 500px;
-    height: 500px;
-    margin-left: -250px;
-    margin-top: -250px;
-    transform-origin: 50% 48%;
-    border-radius: 43%;
-    animation: drift 3000ms infinite linear;
-  }
-  
-  .wave.-three {
-    animation: drift 5000ms infinite linear;
-  }
-  
-  .wave.-two {
-    animation: drift 7000ms infinite linear;
-    opacity: .1;
-    background: $secondary-color;
-  }
-  
-  .m-login-top__container:after {
-    content: '';
-    display: block;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, rgba($base-color, 1), rgba($secondary-color, 0) 80%, rgba($white-color, .5));
-    z-index: 11;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    perspective: 1000;
-  }
-  @keyframes drift {
-    from { transform: rotate(0deg); }
-    from { transform: rotate(360deg); }
-  }
-}
-
 .m-list__container{
   display: flex;
   flex-direction: column;

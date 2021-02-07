@@ -79,7 +79,7 @@ const Configs = () => {
           <MapConfig location={location} setLocation={setLocation} />
         </fieldset>
 
-        <input type="submit" className="button a-config-form__button" />
+        <input type="submit" className="button a-config-form__button" value={t('config.submit')} />
 
       </form>
     </div>

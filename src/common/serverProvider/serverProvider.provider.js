@@ -17,6 +17,7 @@ export const ServerProvider = ({ children }) => {
   const { functions, database } = useFirebase();
   const location = useLocation();
   const [server, setServer] = useState();
+  const [playerServer, setplayerServer] = useState();
   const [isActive, setActive] = useState();
   const [serverLoading, setServerLoading] = useState(true);
 
@@ -56,6 +57,7 @@ export const ServerProvider = ({ children }) => {
       const { ip } = result.data;
       if (ip) {
         const nIp = ip.replaceAll('.', '');
+        setplayerServer(nIp);
         if (ignoreActive) {
           // setServer(nIp);
           resolve(nIp);
@@ -76,6 +78,7 @@ export const ServerProvider = ({ children }) => {
       setServerLoading,
       getIpRequest,
       isActive,
+      playerServer,
       // setServer,
     }),
     [
@@ -84,6 +87,7 @@ export const ServerProvider = ({ children }) => {
       setServerLoading,
       getIpRequest,
       isActive,
+      playerServer,
       // setServer,
     ],
   );

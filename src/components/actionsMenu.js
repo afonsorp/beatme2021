@@ -13,7 +13,7 @@ import { useAuth } from '../common/authProvider/authProvider.useAuth';
 
 const ActionsMenu = () => {
   const { t } = useTranslation();
-  const { user, authRoutes } = useAuth();
+  const { user: { photoURL, name }, authRoutes } = useAuth();
   const menuElements = authRoutes.filter((obj) => obj.showInMenu);
   return (
     <Menu
@@ -26,8 +26,8 @@ const ActionsMenu = () => {
     >
       <MenuItem className="m-beatme-header__menuItem">
         <NavLink to="/" className="a-beatme-header__menuItem" activeClassName="selected" exact>
-          <img src={user.photoURL} alt={user.name} className="avatar" />
-          {user.name}
+          <img src={photoURL} alt={name} className="avatar" />
+          {name}
         </NavLink>
       </MenuItem>
       {menuElements.map((element) => (

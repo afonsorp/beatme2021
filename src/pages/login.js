@@ -61,7 +61,6 @@ const Login = ({ isPlayer }) => {
                 <RiTwitterLine className="icon twitter-icon" />
                 {t('login.twitter')}
               </button>
-
             </>
           )}
         <PoweredBy />

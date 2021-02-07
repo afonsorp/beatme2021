@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" sizes="32x32" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#F08F8F" />
     <meta
       name="description"
       content="Web site created using create-react-app"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="%PUBLIC_URL%/logo_color_144.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -32,17 +32,26 @@
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
     <script>
       window.onSpotifyWebPlaybackSDKReady = () => {
+        console.log("The Web Playback SDK is ready. We have access to Spotify.Player");
+    };
+    </script>
+
+
+    <!-- <script src="https://sdk.scdn.co/spotify-player.js"></script> -->
+    <!-- <script>
+      window.onSpotifyWebPlaybackSDKReady = () => {
         window.Spotify = Spotify;
         console.log("SpotifyWebPlaybackSDKReady")
         const iframe = document.querySelector('iframe[src="https://sdk.scdn.co/embedded/index.html"]');
         if (iframe) {
+          iframe.title
           iframe.style.display = 'block';
           iframe.style.position = 'absolute';
           iframe.style.top = '-1000px';
           iframe.style.left = '-1000px';
         }
       }
-    </script>
+    </script> -->
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
