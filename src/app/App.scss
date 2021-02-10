@@ -48,7 +48,8 @@ html{
 }
 
 .global-container{
-  margin: 0 0.5rem !important;
+  padding: 0 .5rem !important;
+  background-color: $white-color;
 }
 
 .global-container__withTop{
