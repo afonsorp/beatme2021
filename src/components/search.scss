@@ -8,6 +8,8 @@
     outline: none;
     color: $text-color;
     caret-color: $base-color;
+    margin: 0;
+    padding:0;
     &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
         color: $text-color-gray;
         opacity: 1; /* Firefox */

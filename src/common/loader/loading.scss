@@ -4,11 +4,12 @@
     display: none;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
     margin: auto !important;
     background-color: $white-color;
     flex-direction: column;
     height: 100%;
+    flex: 1;
+    overflow: hidden;
     &.-visible{
         display: flex;
     }

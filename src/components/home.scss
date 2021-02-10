@@ -1,0 +1,82 @@
+@import '../app/variables.scss';
+
+.parallax {
+  // background-image: url("img_parallax.jpg");
+  min-height: 30vh; 
+  // background-attachment: fixed;
+  // background-position: center;
+  // background-repeat: no-repeat;
+  // background-size: contain;
+  // opacity: 0.9;
+  // background-position-y: 2rem;
+  // position: relative;
+}
+.parallax__image,
+.parallax__text{
+  display: flex;
+  align-items: center;
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  // min-height: 30vh;
+  padding: 0 1rem;
+  max-width: 600px;
+}
+
+.parallax__text{
+  height: 35vh;
+}
+
+.parallax__image{
+  padding: 0;
+}
+
+.m-song-exposer__container{
+  width: 100%;
+  max-width: 600px;
+}
+
+.a-song-exposer__name,
+.a-song-exposer__song,
+.a-song-exposer__band{
+  font-size: 1rem;
+  width: fit-content;
+  margin: auto;
+  background-color: rgba($base-color, 0.9);
+  color: $white-color;
+  line-height: 1.75rem;
+  padding: 0 0.5rem;
+  min-width: 12rem;
+}
+
+.a-song-exposer__name{
+  font-size: 0.875rem;
+  padding-bottom: 0;
+  min-width: 7rem;
+}
+
+.a-song-exposer__band{
+  font-size: 0.75rem;
+  padding-top: 0;
+  min-width: 7rem;
+}
+
+.button{
+  &.play-button{
+      // background-color: $white-color;
+      background-color: $base-color-fade-lg;
+      color:$white-color;
+      margin  : auto;
+      .icon{
+          color: $white-color;
+      }
+      &.-disabled{
+          cursor: none;
+          color: $text-color-gray;
+          .icon{
+              cursor: none;
+              color: $text-color-gray;
+          }
+      }
+  }
+}

@@ -45,7 +45,7 @@ const Configs = () => {
     updateAdmin(nData);
   };
   return (
-    <div className="global-container">
+    <div className="global-container m-config-form__container">
       <h2 className="a-config-username">{user.name}</h2>
       <form onSubmit={handleSubmit(onSubmit)} noValidate="novalidate" className="m-config-form">
         <fieldset className="m-config-fieldSet">

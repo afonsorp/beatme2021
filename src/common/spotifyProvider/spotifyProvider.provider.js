@@ -25,7 +25,7 @@ export const DEF_SPOTIFY_COUNTRY = 'PT';
 
 export const SpotifyProvider = ({ children }) => {
   const { functions, database } = useFirebase();
-  const { server, playerServer } = useServer();
+  const { server, playerServer, setServerLoading } = useServer();
   const [playlist, setPlaylist] = useState([]);
   const [playing, setPlaying] = useState();
   const [lastPlayed, setLastPlayed] = useState([]);
@@ -48,12 +48,14 @@ export const SpotifyProvider = ({ children }) => {
 
   const setTokenNeeded = useCallback((nToken) => {
     if (nToken) {
+      setServerLoading(false);
       token.current = nToken;
       setTokenSpotify(nToken);
     }
-  }, []);
+  }, [setServerLoading]);
 
   const getAndUpdateToken = useCallback((adminUser) => new Promise((resolve) => {
+    if (!token.current) setServerLoading(true);
     if (!adminUser.isAdmin || gettingToken.current) {
       resolve(false);
     } else {
@@ -82,7 +84,7 @@ export const SpotifyProvider = ({ children }) => {
         resolve(false);
       }
     }
-  }), [functions, database, server, setTokenNeeded, serverRef, playerServer]);
+  }), [functions, database, server, setTokenNeeded, serverRef, playerServer, setServerLoading]);
 
   const updateSpotifyUser = useCallback((nUser) => {
     user.current = nUser;
@@ -137,7 +139,7 @@ export const SpotifyProvider = ({ children }) => {
         console.error({ error });
         resolve([]);
       });
-  }), [user, tokenSpotify, token]);
+  }), [user, token]);
 
   const getRecommend = useCallback((url) => new Promise((resolve) => {
     axios.get(url,
@@ -257,7 +259,8 @@ export const SpotifyProvider = ({ children }) => {
       if (!current) return;
       current.getCurrentState().then((state) => {
         if (!state) return;
-        const { position } = state;
+        const { position, paused } = state;
+        if (paused) return;
         database.ref(`playlists/${serverRef.current}/playing`).update({ position });
       });
     }, 10000);
@@ -295,7 +298,7 @@ export const SpotifyProvider = ({ children }) => {
       if (state && !state.paused && state.position !== position && !isChanging) {
         positionRef.current = state.position;
         database.ref(`playlists/${serverRef.current}/playing`).update({ position: state.position });
-        database.ref(`servers/${serverRef.current}`).update({ active: true });
+        database.ref(`servers/${serverRef.current}`).update({ active: true, action: new Date() });
       }
     });
 

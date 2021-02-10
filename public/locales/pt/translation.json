@@ -39,7 +39,7 @@
     "expandable.icon.delete":"apagar",
     "expandable.icon.details":"detalhes",
     "expandable.icon.favorites":"adicionar aos favoritos",
-    "expandable.icon.remove.favorites":"remover dos favorites",
+    "expandable.icon.remove.favorites":"remover dos favoritos",
     "MaxSong": "máximo de músicas que um utilizador pode ter, em simultâneo, na lista (1-10)",
     "MaxSongError": "número entre 1 e 10",
     "CheckBox": "escolha alguns dos seus género músicais favoritos",

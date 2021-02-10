@@ -21,9 +21,14 @@
 
 
 .m-login-top__container {
-  flex: 1;
-  position: relative;
+  // flex: 1;
+  // position: relative;
+
   overflow: hidden;
+  flex-grow: 1;
+  margin: 0;
+  height: 50% !important;
+
   .image {
     min-height: 300px;
     text-align: center;
@@ -80,15 +85,28 @@
 }
 
 .m-login-bottom__container{
-  flex: 1;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: fixed;
-  bottom: 1rem;
-  width: 100%;
-  max-width: 600px;
+  // flex: 1;
+  // text-align: center;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+  // position: fixed;
+  // bottom: 1rem;
+  // width: 100%;
+  // max-width: 600px;
+
+
+
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    bottom: 1rem;
+    max-width: 600px;
+    flex-grow: 1;
+
+
+
   .button{
     margin-bottom: 0.5rem;
     width: 13rem;

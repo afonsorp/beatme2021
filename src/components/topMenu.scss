@@ -1,9 +1,11 @@
 @import '../app/variables.scss';
 
 .m-beatme-header{
-    color: transparent;
-    flex: 1;
-    max-height: 1rem;
+    // color: transparent;
+    // flex: 1;
+    // max-height: 1.5rem;
+position: fixed;
+z-index: 1;
 }
 
 .m-beatme-header__menu{
@@ -14,9 +16,12 @@
     z-index: 1;
     width: 100%;
     max-width: 600px;
-    background-color: transparent;
+    // background-color: transparent;
     margin: 0;
-    padding: 0.5rem 0.5rem 0 0.5rem;
+    padding: 0.5rem 1rem;
+    position: fixed;
+    background-color: $white-color;
+    height: 2.5rem;
 }
 
 .a-beatme-header__item{
@@ -43,7 +48,7 @@
         border: none;
         line-height: 0;
         outline: none;
-        padding: 0;
+        padding: 0 0.5rem;
         .icon{
             margin:0;
         }

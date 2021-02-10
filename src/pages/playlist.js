@@ -1,15 +1,12 @@
 import React from 'react';
-import PlaylistContainer from '../components/playlistContainer';
-import SongExposer from '../components/songExposer';
+import Home from '../components/home';
 import TopMenu from '../components/topMenu';
 
 const Playlist = () => (
   <>
     <TopMenu />
-    <SongExposer />
-    <PlaylistContainer />
+    <Home />
   </>
 
 );
-
 export default Playlist;

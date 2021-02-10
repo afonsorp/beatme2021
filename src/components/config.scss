@@ -7,8 +7,13 @@
 .a-config-username{
   width: fit-content;
   border-bottom: 1px solid $base-color;
-  margin: 2rem 0 3rem;
+  margin: 3rem 0 2rem;
 }
+
+.m-config-form__container{
+  overflow: auto;
+}
+
 .m-config-fieldSet{
   border: 1px solid $base-color-fade-md;
   margin-bottom: 1rem;
@@ -23,6 +28,10 @@
       width: 6rem;
     }
   }
+}
+
+.m-config-form__containe{
+  overflow: auto;
 }
 
 .m-config-form{

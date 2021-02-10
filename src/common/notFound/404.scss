@@ -9,6 +9,8 @@
     background-color: $white-color;
     flex-direction: column;
     height: 100%;
+    flex: 1;
+    overflow: hidden;
 }
 
 .a-notFound__image{

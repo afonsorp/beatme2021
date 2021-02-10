@@ -1,14 +1,24 @@
 @import '../app/variables.scss';
 
 .m-playlist__container{
-  height: 50%;
-  flex:1;
-  background-color: $base-color-fade-lg;
-  padding-top: 0.5rem;
+  overflow: auto;
+  height: 100%;
+  background-color:transparent;
+
+  &.-home{
+    // height: 100vh;
+    height: calc(100vh - 7rem);
+    // margin-top: -6rem;
+    .m-playlist__container__list{
+      top: 6rem;
+      height: calc(100% - 6rem);
+    }
+  }
 }
 
 .m-playlist__container__list{
-    height: 100%;
-    overflow: auto;
-    margin: 0 0.5rem;
+  position: relative;
+  background-color: $play-back;
+  overflow: auto;
+  height: 100%;
 }

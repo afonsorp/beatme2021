@@ -88,22 +88,22 @@ exports.refreshSpotifyToken = functions.https.onRequest((req, res) => {
   });
 });
 
-exports.getIp = functions.https.onRequest((req, res) => {
-  cors(req, res, () => {
-    res.set('Cache-Control', 'max-age=3600');
-    let addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    if (/,/.test(addr)) {
-      const arr = addr.split(',');
-      [addr] = arr;
-    }
-    const data = {
-      data: {
-        ip: addr,
-      },
-    };
-    res.json(data);
-  });
-});
+// exports.getIp = functions.https.onRequest((req, res) => {
+//   cors(req, res, () => {
+//     res.set('Cache-Control', 'max-age=3600');
+//     let addr = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+//     if (/,/.test(addr)) {
+//       const arr = addr.split(',');
+//       [addr] = arr;
+//     }
+//     const data = {
+//       data: {
+//         ip: addr,
+//       },
+//     };
+//     res.json(data);
+//   });
+// });
 
 /**
  * Redirects the User to the Spotify authentication
@@ -266,9 +266,12 @@ exports.hourlyWork = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     database.ref('/servers').once('value', (dataSnapshot) => {
       if (dataSnapshot.exists()) {
+        const newDate = new Date();
+        const DIFFERENCE = 30 * 60 * 1000;
         dataSnapshot.forEach((serverSnap) => {
-          const server = serverSnap.val() || { active: false };
-          if (!server.active) {
+          const server = serverSnap.val() || { active: false, action: newDate };
+          const isTime = (newDate - new Date(server.action)) > DIFFERENCE;
+          if (!server.active || isTime) {
             const ip = serverSnap.key;
             serverSnap.ref.remove();
             database.ref(`/playlists/${ip}`).remove();

@@ -2,7 +2,7 @@
 
 .swipeable-list-item__content {
     background-color: $play-back;
-    padding: 0.4rem 0;
+    padding: 0.5rem 1rem;
     border-bottom: 1px solid $base-color-fade-md;
 }
 
@@ -13,10 +13,10 @@
   width: 100%;
   border-radius: 4px;
   &.-yellow{
-    color: $yellow-color;
+    color: $yellow-text;
   }
   &.-red{
-    color: $red-color;
+    color: $red-text;
   }
   &.-right{
     justify-content: flex-end;
@@ -29,7 +29,7 @@
 }
 
 .m-swipeable-item__group{
-  margin: 0 0 0 0.5rem;
+  margin: 0 0 0 1rem;
   background-color: $play-back;
   color: #FFFFFF;
   position: relative;
@@ -56,10 +56,14 @@
         border: 1px solid $white-color;
       }
       .m-swipeable-item__info{
+        font-size:0.875rem;
         display: flex;
         flex-direction: column;
         margin-left: 0.5rem;
         flex: 1;
+      }
+      .a-swipeable-item__name{
+        font-size:0.75rem;
       }
 }
 
@@ -95,4 +99,17 @@
     bottom: 0.6rem;
     display: inline-flex;
   }
+}
+
+.swipeable-list-item__content-right,
+.swipeable-list-item__content-left{
+  padding: 0.5rem 1rem;
+}
+
+.swipeable-list-item__content-right{
+  background-color: $favorites;
+}
+
+.swipeable-list-item__content-left{
+  background-color: $delete;
 }

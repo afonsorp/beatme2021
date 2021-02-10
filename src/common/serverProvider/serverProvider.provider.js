@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import { useLocation } from 'react-router-dom';
+import axios from 'axios';
 import ServerContext from './serverProvider.context';
 import { useFirebase } from '../firebaseProvider/firebaseProvider.useFirebase';
 
@@ -51,32 +52,54 @@ export const ServerProvider = ({ children }) => {
     watchActive(resolveIp);
   }, [setInStorage, watchActive]);
 
-  const getIpRequest = useCallback((ignoreActive = false) => new Promise((resolve) => {
-    const getIp = functions.httpsCallable('getIp');
-    getIp().then((result) => {
-      const { ip } = result.data;
+  const getIpFromHeroku = useCallback((ignoreActive = false) => new Promise((resolve) => {
+    axios.get('https://beatme-get-ip.herokuapp.com/ip').then((result) => {
+      const { ip, isIPv6 } = result.data;
       if (ip) {
         const nIp = ip.replaceAll('.', '');
         setplayerServer(nIp);
         if (ignoreActive) {
-          // setServer(nIp);
-          resolve(nIp);
           setServerKey(nIp);
+          resolve(nIp);
+          return;
+        }
+        if (isIPv6) {
+          resolve(false);
         } else {
           checkActive(nIp).then((active) => resolve(active));
         }
       } else {
         resolve(false);
       }
-    }).catch(() => resolve(false));
-  }), [checkActive, functions, setServerKey]);
+    });
+  }), [checkActive, setServerKey]);
+
+  // const getIpRequest = useCallback((ignoreActive = false) => new Promise((resolve) => {
+  //   const getIp = functions.httpsCallable('getIp');
+  //   getIp().then((result) => {
+  //     const { ip } = result.data;
+  //     if (ip) {
+  //       const nIp = ip.replaceAll('.', '');
+  //       setplayerServer(nIp);
+  //       if (ignoreActive) {
+  //         // setServer(nIp);
+  //         resolve(nIp);
+  //         setServerKey(nIp);
+  //       } else {
+  //         checkActive(nIp).then((active) => resolve(active));
+  //       }
+  //     } else {
+  //       resolve(false);
+  //     }
+  //   }).catch(() => resolve(false));
+  // }), [checkActive, functions, setServerKey]);
 
   const value = useMemo(
     () => ({
       server,
       serverLoading,
       setServerLoading,
-      getIpRequest,
+      getIpRequest: getIpFromHeroku,
       isActive,
       playerServer,
       // setServer,
@@ -85,7 +108,7 @@ export const ServerProvider = ({ children }) => {
       server,
       serverLoading,
       setServerLoading,
-      getIpRequest,
+      getIpFromHeroku,
       isActive,
       playerServer,
       // setServer,
@@ -103,16 +126,16 @@ export const ServerProvider = ({ children }) => {
     }
   }), [location, checkActive]);
 
-  const getFromStorage = useCallback(() => {
-    const serverInfo = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return new Promise((resolve) => {
-      if (serverInfo) {
-        checkActive(serverInfo).then((active) => resolve(active));
-      } else {
-        resolve(false);
-      }
-    });
-  }, [checkActive]);
+  // const getFromStorage = useCallback(() => {
+  //   const serverInfo = localStorage.getItem(LOCAL_STORAGE_KEY);
+  //   return new Promise((resolve) => {
+  //     if (serverInfo) {
+  //       checkActive(serverInfo).then((active) => resolve(active));
+  //     } else {
+  //       resolve(false);
+  //     }
+  //   });
+  // }, [checkActive]);
 
   const getServerList = useCallback(() => new Promise((resolve) => {
     database.ref('/servers').once('value', (serversList) => {
@@ -190,23 +213,18 @@ export const ServerProvider = ({ children }) => {
 
   useEffect(() => {
     if (!serverLoading || !functions || !location || !database) return;
+    setServerLoading(true);
     getFromUrl().then((resUrl) => {
       if (resUrl) {
         setServerKey(resUrl);
       } else {
-        getFromStorage().then((resStorage) => {
-          if (resStorage) {
-            setServerKey(resStorage);
+        getIpFromHeroku().then((resRequest) => {
+          if (resRequest) {
+            setServerKey(resRequest);
           } else {
-            getIpRequest(false).then((resRequest) => {
-              if (resRequest) {
-                setServerKey(resRequest);
-              } else {
-                getByGeo().then((resGeo) => {
-                  const { closest, secondClosest } = resGeo;
-                  setServerKey(closest || secondClosest);
-                });
-              }
+            getByGeo().then((resGeo) => {
+              const { closest, secondClosest } = resGeo;
+              setServerKey(closest || secondClosest);
             });
           }
         });
@@ -217,10 +235,10 @@ export const ServerProvider = ({ children }) => {
     location,
     database,
     getByGeo,
-    getFromStorage,
-    getIpRequest,
+    // getFromStorage,
+    // getIpRequest,
     setServerKey,
-    serverLoading]);
+    serverLoading, getIpFromHeroku]);
 
   return (
     <ServerContext.Provider value={value}>
