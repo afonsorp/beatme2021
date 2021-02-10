@@ -20,7 +20,9 @@ z-index: 1;
     margin: 0;
     padding: 0.5rem 1rem;
     position: fixed;
-    background-color: $white-color;
+    // background-color: $base-color-fade-menu;
+    background-image: $base-color-fade-menu;
+
     height: 2.5rem;
 }
 
@@ -33,7 +35,7 @@ z-index: 1;
 
 .icon{
     &.a-beatme-header__icon{
-        // color: $text-color-gray;
+        color: $white-color;
         position: relative;
         font-size: 1.5rem;
     }

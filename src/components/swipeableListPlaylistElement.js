@@ -29,10 +29,10 @@ const SwipeableListPlaylistElement = ({
         content: <RemSwipe />,
         action: () => removeFromPlaylist(element),
       } : undefined}
-      swipeRight={{
+      swipeRight={!user.isAdmin ? {
         content: <SwipeRight />,
         action: () => addToFavorites(element),
-      }}
+      } : undefined}
     >
       <div className="m-swipeable-item__container__song">
         <div className="m-swipeable-item__infoContainer">

@@ -3,10 +3,11 @@ import AlbumModel from './albumModel';
 import ArtistModel from './artistModel';
 
 class SongModel extends Model({
-  uri: String, name: String, duration_ms: Number, album: Object, user: Object,
+  uri: String, name: String, duration_ms: Number, album: Object, user: Object, id: String,
 }) {
   get song() {
     return {
+      id: this.id,
       uri: this.uri,
       name: this.name,
       duration: this.duration_ms,

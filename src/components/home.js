@@ -6,27 +6,34 @@ import { useSpotify } from '../common/spotifyProvider/spotifyProvider.useSpotify
 import './home.scss';
 import { SongTimer } from '../common/utils/timer';
 import PlaylistContainer from './playlistContainer';
+import BlankCd from '../images/blank_cd.jpeg';
 
 const Home = () => {
   const { playing } = useSpotify();
+  const usename = playing && playing.owner ? playing.owner.name : 'N/A';
+  const cover = playing && playing.album ? playing.album.backImage.url : BlankCd;
+  const artist = playing && playing.artist ? playing.artist.name : 'N/A';
+  const music = playing ? playing.name : 'N/A';
+
   return (
     <Parallax
       renderLayer={() => (
         <div
-          style={{
-            position: 'relative',
-            top: '1rem',
-            width: '600px',
-          }}
+          className="paralax-container"
+          // style={{
+          //   position: 'relative',
+          //   top: '1rem',
+          //   width: '600px',
+          // }}
         >
-          {playing && <img src={playing.album.backImage.url} alt={playing.artist.name} className="parallax__image" />}
+          <img src={cover} alt={artist} className="parallax__image" />
           <div className="parallax">
             <span className="parallax__text">
               <div className="m-song-exposer__container">
-                <div className="a-song-exposer__name">{playing ? playing.owner.name : 'N/A'}</div>
+                <div className="a-song-exposer__name">{usename}</div>
                 <div className="a-song-exposer__song">
-                  {playing ? `${playing.artist.name} - ` : 'N/A - '}
-                  {playing ? playing.name : 'N/A'}
+                  {`${artist} - `}
+                  {music}
                 </div>
                 <div className="a-song-exposer__band"><SongTimer /></div>
               </div>

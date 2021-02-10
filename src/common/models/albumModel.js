@@ -12,7 +12,7 @@ class AlbumModel extends Model({
     return {
       uri: this.uri,
       name: this.name,
-      backImage: this.images.length ? this.images[1] : blankCd[1],
+      backImage: this.images.length ? this.images[0] : blankCd[0],
       avatarImage: this.images.length ? this.images[2] : blankCd[2],
     };
   }
