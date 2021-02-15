@@ -19,6 +19,12 @@
 }
 
 .a-noServer-text{
-    color:$base-color;
+    // color:$base-color;
     text-align: center;
+}
+
+.icon{
+    &.icon-full-page{
+        margin: 0;
+      }
 }

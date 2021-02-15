@@ -12,9 +12,7 @@ const LastSong = () => {
       <div className="m-list__containerTitle">
         <span>{t('menu.last.played')}</span>
       </div>
-      <div className="m-list__containerWaves">
-        <Waves />
-      </div>
+      <Waves />
       <div className="m-playlist__container m-playlist__containerList">
         <div className="m-playlist__container__list">
           <SwipeableListComp result={lastPlayed} type={LIST_TYPES.LAST_PLAYED} />

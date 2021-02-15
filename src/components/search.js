@@ -18,12 +18,10 @@ const Search = () => {
           isSuggestion={isSuggestion}
         />
       </div>
-      <div className="m-list__containerWaves">
-        <Waves />
-        {isSuggestion && <p className="a-list__inspiration">{t('search.results.suggestions')}</p>}
-      </div>
+      <Waves />
       <div className="m-playlist__container m-playlist__containerList">
         <div className="m-playlist__container__list">
+          {isSuggestion && <p className="a-list__inspiration">{t('search.results.suggestions')}</p>}
           <SwipeableListComp result={result} type={LIST_TYPES.SEARCH} />
         </div>
       </div>

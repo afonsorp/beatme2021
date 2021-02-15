@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }) => {
   const tokenInterval = useRef();
 
   const updateAdmin = useCallback((configs) => {
-    setLoadingUser(true);
+    // setLoadingUser(true);
     const nUser = user;
     const nDetails = new AdminDetails({ ...nUser.details, ...configs }).details;
     nUser.details = nDetails;
@@ -114,7 +114,7 @@ export const AuthProvider = ({ children }) => {
     }
     toast.dark(t('notify.config.save'));
     history.push('/');
-    setLoadingUser(false);
+    // setLoadingUser(false);
   }, [user, firestore, database, server, history, t]);
 
   const logout = useCallback(() => {
@@ -231,7 +231,11 @@ export const AuthProvider = ({ children }) => {
         } else if (userModel.isAdmin) {
           getAndUpdateToken(userModel).then((token) => {
             if (token) {
-              setUser(userModel);
+              setUser(() => {
+                setLoadingUser(false);
+                return userModel;
+              });
+
               if (tokenInterval.current) clearInterval(tokenInterval.current);
               tokenInterval.current = setInterval(() => {
                 getAndUpdateToken(userModel).then((r) => {
@@ -239,7 +243,6 @@ export const AuthProvider = ({ children }) => {
                 });
               }, 10 * 60 * 1000);
             }
-            setLoadingUser(false);
           });
         } else {
           setUser(userModel);

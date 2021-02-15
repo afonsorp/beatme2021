@@ -12,9 +12,7 @@ const TopDj = () => {
       <div className="m-list__containerTitle">
         <span>{t('menu.top.dj')}</span>
       </div>
-      <div className="m-list__containerWaves">
-        <Waves />
-      </div>
+      <Waves />
       <div className="m-playlist__container m-playlist__containerList">
         <div className="m-playlist__container__list">
           <SwipeableListComp result={topDj} type={LIST_TYPES.TOP_DJ} />

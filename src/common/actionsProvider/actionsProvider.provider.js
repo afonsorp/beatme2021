@@ -81,7 +81,7 @@ export const ActionsProvider = ({ children }) => {
     };
     const ref = firestore.collection('users').doc(user.uid);
     ref.set({
-      favorites: { [element.uri]: nSong },
+      favorites: { [element.id]: nSong },
     }, { merge: true }).then(() => {
       toast.dark(t('notify.music.to.favorites'));
       ref.get().then((f) => {
@@ -102,7 +102,7 @@ export const ActionsProvider = ({ children }) => {
       const ref = firestore.collection('users').doc(`${user.uid}`);
       ref.get().then((doc) => {
         doc.ref.update({
-          [`favorites.${element.uri}`]: firebaseProject.firestore.FieldValue.delete(),
+          [`favorites.${element.id}`]: firebaseProject.firestore.FieldValue.delete(),
         }).then(() => {
           toast.dark(t('notify.music.removed.favorites'));
           ref.get().then((f) => {
@@ -177,9 +177,9 @@ export const ActionsProvider = ({ children }) => {
     if (!isPlaying && !inPlaylist && insideLimit) {
       database.ref(`playlists/${server}/playlist`).update({ [song.uri]: song }).then(() => {
         firestore.collection('users').doc(user.uid).set({
-          lastSongByUser: song.uri,
+          lastSongByUser: song.id,
         }, { merge: true });
-        setLastSongFromUser(song.uri);
+        setLastSongFromUser(song.id);
         toast.dark(t('notify.music.added.playlist'));
       }).catch(() => {
         toast.error(t('notify.music.error'));

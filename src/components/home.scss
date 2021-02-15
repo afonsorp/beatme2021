@@ -1,8 +1,68 @@
 @import '../app/variables.scss';
 
+
+.parallax-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  perspective: 1px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  max-width: 600px;
+  margin: auto;
+  background-color: $play-back;
+}
+
+.parallax-text{
+  top: -2.5rem;
+  position: relative;
+}
+
+.parallax-image {
+  // height: 100vh;
+  position: relative;
+  transform-style: preserve-3d;
+  // font-size: 20px;
+  height: calc(100% - 125px);
+}
+
+.parallax-background {
+  transform: translateZ(-1px) scale(2);
+  // height: 50vh;
+  width: 100%;
+  position: absolute;
+  // top: 0;
+  background: center;
+  // padding-top: 100px;
+  background-size: cover;
+  // top: -25vh;
+  height: 500px;
+  top: -250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.parallax-playlist {
+  position: absolute;
+  top: 250px;
+  // height: calc(50vh - 6rem);
+  width: 100%; 
+  height: 100%;
+  // top: calc(50vh - 8.5rem);
+  // background: #23819C;
+  // opacity: 0.8;
+  // padding-top: 100px;
+  // height: calc(100% - 125px);
+}
+
+
 .parallax {
   // background-image: url("img_parallax.jpg");
-  min-height: 30vh; 
+  // min-height: 50vh; 
   // background-attachment: fixed;
   // background-position: center;
   // background-repeat: no-repeat;
@@ -11,31 +71,37 @@
   // background-position-y: 2rem;
   // position: relative;
 }
-.parallax__image,
-.parallax__text{
-  display: flex;
-  align-items: center;
-  text-align: center;
-  position: fixed;
-  width: 100%;
-  padding: 0 1rem;
-  max-width: 600px;
-  min-height: 35vh;
-}
+// .parallax__image,
+// .parallax__text{
+//   display: flex;
+//   align-items: center;
+//   text-align: center;
+//   position: fixed;
+//   width: 100%;
+//   padding: 0 1rem;
+//   max-width: 600px;
+//   min-height: 40vh;
+// }
 
-.parallax__text{
-  height: 35vh;
-}
+// .parallax__text{
+//   height: 40vh;
+// }
 
-.parallax__image{
-  padding: 0;
-  // opacity: 0.9;
-}
+// .react-parallax-background {
+//   width: 100%;
+//   height: 50vh;
+//   position: absolute;
+// }
 
-.m-song-exposer__container{
-  width: 100%;
-  max-width: 600px;
-}
+// .parallax__image{
+//   padding: 0;
+//   // opacity: 0.9;
+// }
+
+// .m-song-exposer__container{
+//   width: 100%;
+//   max-width: 600px;
+// }
 
 .a-song-exposer__name,
 .a-song-exposer__song,
@@ -44,10 +110,11 @@
   width: fit-content;
   margin: auto;
   background-color: rgba($base-color, 0.9);
-  color: $white-color;
+  // color: $white-color;
   line-height: 1.75rem;
   padding: 0 0.5rem;
   min-width: 12rem;
+  box-shadow: $strong-shadow-color;
 }
 
 .a-song-exposer__name{
@@ -65,11 +132,11 @@
 .button{
   &.play-button{
       // background-color: $white-color;
-      background-color: $base-color-fade-lg;
-      color:$white-color;
-      margin  : auto;
+      background-color: $secondary-color;
+      color:$base-color;
+      margin: 0 auto 1rem auto;
       .icon{
-          color: $white-color;
+          color: $base-color;
       }
       &.-disabled{
           cursor: none;

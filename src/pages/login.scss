@@ -1,9 +1,5 @@
 @import '../app/variables.scss';
 
-.m-login-bottom__container{
-    height: 50%;
-}
-
 .icon.spotify-icon{
     color: #1DB954;
 }
@@ -45,7 +41,7 @@
     position: absolute;
     top: 3%;
     left: 50%;
-    background: $base-color;
+    background: $color-5;
     width: 500px;
     height: 500px;
     margin-left: -250px;
@@ -57,12 +53,16 @@
   
   .wave.-three {
     animation: drift 5000ms infinite linear;
+    background: $color-4;
+
   }
   
   .wave.-two {
     animation: drift 7000ms infinite linear;
     opacity: .1;
-    background: $secondary-color;
+    // background: $secondary-color;
+    background: $color-3;
+
   }
   
   .m-login-top__container:after {
@@ -96,6 +96,7 @@
   // max-width: 600px;
 
 
+  height: 50%;
 
 
     display: flex;

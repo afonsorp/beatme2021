@@ -6,8 +6,8 @@
     width: 100%;
     border: none;
     outline: none;
-    color: $text-color;
-    caret-color: $base-color;
+    color: $text-color-gray;
+    caret-color: $color-3;
     margin: 0;
     padding:0;
     &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -26,6 +26,6 @@
 
 .a-list__inspiration{
   width: 100%;
-  padding: 0 0.5rem;
-  color:$white-color;
+  padding: 0 1rem;
+  // color:$white-color;
 }

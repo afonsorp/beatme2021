@@ -1,9 +1,12 @@
 @import '../app/variables.scss';
+
 .a-svg__waves{
     position: absolute;
     width: 100%;
     max-width: 600px;
-    height: fit-content;
+    shape-rendering: crispEdges;
+    transform: translate3d(0, 0, 0);
+    // height: fit-content;
     // z-index: -1;
     &.-one{
         fill:$play-back;

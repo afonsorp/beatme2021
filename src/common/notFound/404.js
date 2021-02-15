@@ -1,14 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import loadImage from '../../images/tool-outline.gif';
-
+import {
+  BiCommentX,
+} from 'react-icons/bi';
 import './404.scss';
 
 const NotFound = () => {
   const { t } = useTranslation();
   return (
     <div className="o-notFound">
-      <img src={loadImage} alt="404" className="a-notFound__image" />
+      <BiCommentX className="icon icon-full-page" />
       <p className="a-notFound-text">{t('not.found.text')}</p>
     </div>
   );

@@ -1,41 +1,53 @@
 @import '../app/variables.scss';
 
-.m-beatme-header{
-    // color: transparent;
-    // flex: 1;
-    // max-height: 1.5rem;
-position: fixed;
-z-index: 1;
-}
+// .m-beatme-header{
+//     // color: transparent;
+//     // flex: 1;
+//     // max-height: 1.5rem;
+// position: fixed;
+// z-index: 1;
+// }
+
+// .m-beatme-header__menu{
+//     display: flex;
+//     padding-inline-start: 0.5rem;
+//     padding-inline-end: 0.5rem;
+//     // position: fixed;
+//     z-index: 1;
+//     width: 100%;
+//     max-width: 600px;
+//     // background-color: transparent;
+//     margin: 0;
+//     padding: 0.5rem 1rem;
+//     position: fixed;
+//     // background-color: $base-color-fade-menu;
+//     background-image: $base-color-fade-menu;
+
+//     height: 2.5rem;
+// }
+
+// .a-beatme-header__item{
+//     flex: 1 1 auto;
+//     &.--last{
+//         text-align: right;
+//     }
+// }
 
 .m-beatme-header__menu{
-    display: flex;
-    padding-inline-start: 0.5rem;
-    padding-inline-end: 0.5rem;
-    // position: fixed;
+    background-color: rgba($base-color, 0.9);
+    position: absolute;
     z-index: 1;
-    width: 100%;
-    max-width: 600px;
-    // background-color: transparent;
+    top: -1.5rem;
+    right: -1.5rem;
+    padding: 0;
     margin: 0;
-    padding: 0.5rem 1rem;
-    position: fixed;
-    // background-color: $base-color-fade-menu;
-    background-image: $base-color-fade-menu;
-
-    height: 2.5rem;
-}
-
-.a-beatme-header__item{
-    flex: 1 1 auto;
-    &.--last{
-        text-align: right;
-    }
+    border-radius: 50%;
+    box-shadow: 0 0.5rem 1rem rgba($text-color, 0.2);
 }
 
 .icon{
     &.a-beatme-header__icon{
-        color: $white-color;
+        // color: $white-color;
         position: relative;
         font-size: 1.5rem;
     }
@@ -46,18 +58,28 @@ z-index: 1;
 .a-beatme-header__menuButton:focus,
 .a-beatme-header__menuButton:active,
 .a-beatme-header__menuButton:visited {
-        background: transparent;
-        border: none;
-        line-height: 0;
-        outline: none;
-        padding: 0 0.5rem;
-        .icon{
-            margin:0;
-        }
+    background: transparent;
+    border: none;
+    padding: 1rem;
+    margin: 1rem 1rem 0 0;
+    outline: none;
+    width: 4rem;
+    height: 4rem;
+    .icon{
+        margin:0;
     }
+}
 .m-beatme-header__menuItem{
     border-bottom: 1px solid $base-color-fade-md;
 }    
+
+.m-beatme-header__menuActions{
+    background-color: $base-color;
+    .rc-menu__item,
+    .rc-menu__arrow{
+        background-color: $base-color;
+    }
+}
 
 .a-beatme-header__menuItem{
     color: $text-color;
@@ -68,7 +90,7 @@ z-index: 1;
     -webkit-tap-highlight-color: transparent;
     &.selected{
         text-decoration: none;
-        color:$base-color;
+        color:$text-color-gray;
         background-color: transparent;
         -webkit-tap-highlight-color: transparent;
     }
@@ -76,5 +98,6 @@ z-index: 1;
         text-decoration: none;
         background-color: transparent;
         -webkit-tap-highlight-color: transparent;
+        outline: none;
     }
 }

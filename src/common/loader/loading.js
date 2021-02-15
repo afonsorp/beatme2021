@@ -1,9 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import {
+  ImSpinner10,
+} from 'react-icons/im';
 import { useAuth } from '../authProvider/authProvider.useAuth';
 import { useServer } from '../serverProvider/serverProvider.useServer';
-import loadImage from '../../images/loader.gif';
 import PoweredBy from '../poweredBy/poweredBy';
 
 import './loading.scss';
@@ -14,7 +16,7 @@ const LoadingComponent = () => {
   const { t } = useTranslation();
   return (
     <div className={classNames('o-loading', 'global-container', { '-visible': loadingUser || serverLoading })}>
-      <img src={loadImage} alt="loading" className="a-loading__image" />
+      <ImSpinner10 className="icon icon-spin icon-full-page" />
       <p className="a-loading__text">{t('loading.text')}</p>
       <PoweredBy />
     </div>

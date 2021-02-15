@@ -1,12 +1,13 @@
 /* eslint-disable global-require */
 /* eslint-disable import/no-dynamic-require */
 import React from 'react';
-import { Parallax } from 'react-parallax';
+// import { Parallax, Background } from 'react-parallax';
 import { useSpotify } from '../common/spotifyProvider/spotifyProvider.useSpotify';
 import './home.scss';
 import { SongTimer } from '../common/utils/timer';
 import PlaylistContainer from './playlistContainer';
 import BlankCd from '../images/blank_cd.jpeg';
+import { Waves } from './svgWaveContainer';
 
 const Home = () => {
   const { playing } = useSpotify();
@@ -16,18 +17,11 @@ const Home = () => {
   const music = playing ? playing.name : 'N/A';
 
   return (
-    <Parallax
-      renderLayer={() => (
-        <div
-          className="paralax-container"
-          // style={{
-          //   position: 'relative',
-          //   top: '1rem',
-          //   width: '600px',
-          // }}
-        >
-          <img src={cover} alt={artist} className="parallax__image" />
-          <div className="parallax">
+
+    <div className="parallax-container">
+      <div className="parallax-image">
+        <div className="parallax-background" style={{ backgroundImage: `url(${cover})` }}>
+          <center>
             <span className="parallax__text">
               <div className="m-song-exposer__container">
                 <div className="a-song-exposer__name">{usename}</div>
@@ -39,16 +33,41 @@ const Home = () => {
               </div>
             </span>
 
-          </div>
+          </center>
         </div>
-      )}
-    >
-      {/* <Background className="parallax__text"> */}
-      {/* </Background> */}
+        <div className="parallax-playlist">
+          {/* <center> */}
+          <Waves className="parallax-playlist-waves--home" />
+          <PlaylistContainer />
+          {/* </center> */}
+        </div>
+      </div>
+    </div>
 
-      <PlaylistContainer />
-
-    </Parallax>
+  // <Parallax
+  //   renderLayer={() => (
+  //     <div
+  //       className="paralax-container"
+  //     >
+  //       <Background>
+  //         <img src={cover} alt={artist} className="parallax__image" />
+  //       </Background>
+  //       <div className="parallax">
+  //         <span className="parallax__text">
+  //           <div className="m-song-exposer__container">
+  //             <div className="a-song-exposer__name">{usename}</div>
+  //             <div className="a-song-exposer__song">
+  //               {`${artist} - `}
+  //               {music}
+  //             </div>
+  //             <div className="a-song-exposer__band"><SongTimer /></div>
+  //           </div>
+  //         </span>
+  //       </div>
+  //       <PlaylistContainer />
+  //     </div>
+  //   )}
+  // />
   );
 };
 

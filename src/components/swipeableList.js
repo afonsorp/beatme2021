@@ -32,7 +32,7 @@ const SwipeableListComp = ({
   const { t } = useTranslation();
   const isMine = useCallback((element) => element.owner.uid === user.uid, [user]);
   const isFavorite = useCallback((element) => (user.details.favorites
-    ? Object.keys(user.details.favorites).includes(element.uri)
+    ? Object.keys(user.details.favorites).includes(element.id)
     : false), [user]);
 
   const FavSwipe = memo(({ isFav }) => (

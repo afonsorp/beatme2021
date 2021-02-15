@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import { RiPlayCircleLine, RiSkipForwardLine, RiPlayListAddLine } from 'react-icons/ri';
 import { useTranslation } from 'react-i18next/';
 import { useHistory } from 'react-router-dom';
-import { Waves } from './svgWaveContainer';
+// import { Waves } from './svgWaveContainer';
 import { useSpotify } from '../common/spotifyProvider/spotifyProvider.useSpotify';
 import { useActions } from '../common/actionsProvider/actionsProvider.useActions';
 import { useAuth } from '../common/authProvider/authProvider.useAuth';
@@ -62,7 +62,7 @@ const PlaylistContainer = () => {
 
   return (
     <div className="m-playlist__container -home">
-      <Waves />
+      {/* <Waves /> */}
       <div className="m-playlist__container__list">
         {getButton()}
 

@@ -18,6 +18,8 @@
     width: 3.5rem;
 }
 
-.a-notFound-text{
-    color:$base-color;
+.icon{
+    &.icon-full-page{
+        margin: 0;
+      }
 }

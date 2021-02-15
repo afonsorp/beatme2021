@@ -194,7 +194,7 @@ export const SpotifyProvider = ({ children }) => {
     const { lastSongByUser } = current.details;
     let url = '';
     if (lastSongByUser) {
-      const seed = `seed_tracks=${lastSongByUser.replace('spotify:track:', '')}`;
+      const seed = `seed_tracks=${lastSongByUser}`;
       url = `${RECOMMENDATIONS_URL}?limit=5&${seed}&max_duration_ms=300000&market=${spotifyCountry.current}`;
     } else {
       url = `${SEARCH_URL}?limit=5&q=${getRandomSearch()}*&type=track&market=${spotifyCountry.current}`;
@@ -210,7 +210,7 @@ export const SpotifyProvider = ({ children }) => {
     }
     const { favGenres } = adminUser.details;
     const genre = favGenres[Math.floor(Math.random() * favGenres.length)];
-    const seed = playingRef.current ? `seed_artists=${playingRef.current.artist.id}&seed_tracks=${playingRef.current.id}` : `seed_genres=${genre || 'ambient'}`;
+    const seed = playingRef.current && playingRef.current.id ? `seed_artists=${playingRef.current.artist.id}&seed_tracks=${playingRef.current.id}` : `seed_genres=${genre || 'ambient'}`;
     const url = `${RECOMMENDATIONS_URL}?limit=1&${seed}&max_duration_ms=300000&market=${spotifyCountry.current}`;
     getRecommend(url).then(resolve);
   }), [getRecommend, user]);
@@ -218,7 +218,7 @@ export const SpotifyProvider = ({ children }) => {
   const getSongToPlay = useCallback(({ ignorePlaying }) => new Promise((resolve) => {
     const { current: currentPlaying } = playingRef;
     const { current: currentPlaylist } = playlistRef;
-    if (!ignorePlaying && currentPlaying) {
+    if (!ignorePlaying && currentPlaying && currentPlaying.id) {
       resolve({ song: currentPlaying, remove: false });
     } else if (currentPlaylist.length > 0) {
       resolve({ song: currentPlaylist[0], remove: currentPlaying });
@@ -268,8 +268,8 @@ export const SpotifyProvider = ({ children }) => {
 
   const startPlaying = useCallback(() => {
     // const token = '[My Spotify Web API access token]';
-    const { current } = player;
-    const nPlayer = current || new window.Spotify.Player({
+    // const { current } = player;
+    const nPlayer = new window.Spotify.Player({
       name: 'Beatme Player',
       getOAuthToken: (cb) => {
         cb(token.current);
