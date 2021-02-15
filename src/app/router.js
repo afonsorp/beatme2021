@@ -5,6 +5,9 @@ import { Route, Switch } from 'react-router-dom';
 import {
   BrowserView,
   MobileView,
+  isChrome,
+  isFirefox,
+  isEdge,
 } from 'react-device-detect';
 import { useAuth } from '../common/authProvider/authProvider.useAuth';
 import { useServer } from '../common/serverProvider/serverProvider.useServer';
@@ -17,13 +20,16 @@ import Settings from '../pages/settings';
 import { BASE_ROUTES } from '../common/authProvider/authProvider.provider';
 
 const getComponent = ({
-  server, user, children,
+  server, user, children, isActive,
 }) => {
   if (!server && !user) {
     return (
       <>
         <MobileView><NoPlayer /></MobileView>
-        <BrowserView><Login isPlayer /></BrowserView>
+        <BrowserView>
+          { isChrome || isFirefox || isEdge ? <Login isPlayer />
+            : <NoPlayer notSupportedMessage /> }
+        </BrowserView>
       </>
     );
   }
@@ -36,19 +42,19 @@ const getComponent = ({
       </>
     );
   }
-  if (!server) {
+  if (!server || !isActive) {
     return <NoPlayer />;
   }
   return <Login />;
 };
 
 const PrivateRoute = ({ children, ...rest }) => {
-  const { user, loadingUser } = useAuth();
+  const { user, loadingUser, isActive } = useAuth();
   const { server, serverLoading } = useServer();
   if (serverLoading || loadingUser) return <LoadingComponent />;
   const needsRedirect = !loadingUser && !serverLoading && (!user || !server);
   const component = getComponent({
-    server, user, children,
+    server, user, children, isActive,
   });
   return (
     <Route

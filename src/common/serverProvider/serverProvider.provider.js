@@ -19,7 +19,7 @@ export const ServerProvider = ({ children }) => {
   const location = useLocation();
   const [server, setServer] = useState();
   const [playerServer, setplayerServer] = useState();
-  const [isActive, setActive] = useState();
+  const [isActive] = useState();
   const [serverLoading, setServerLoading] = useState(true);
 
   const checkActive = useCallback((key) => new Promise((resolve) => {
@@ -37,20 +37,21 @@ export const ServerProvider = ({ children }) => {
     localStorage.setItem(LOCAL_STORAGE_KEY, ip);
   }, []);
 
-  const watchActive = useCallback((ip) => {
-    database.ref(`/servers/${ip}/active`).on('value', (snapshot) => {
-      const active = snapshot.val();
-      setActive(active);
-    });
-  }, [database]);
+  // const watchActive = useCallback((ip) => {
+  //   database.ref(`/servers/${ip}/active`).on('value', (snapshot) => {
+  //     const active = snapshot.val();
+  //     isActiveRef.current = active;
+  //     setIsActive(() => active);
+  //   });
+  // }, [database]);
 
   const setServerKey = useCallback((ip) => {
     const resolveIp = isValidServer(ip) ? ip : false;
     setServerLoading(false);
     setInStorage(resolveIp);
     setServer(resolveIp);
-    watchActive(resolveIp);
-  }, [setInStorage, watchActive]);
+    // watchActive(resolveIp);
+  }, [setInStorage]);
 
   const getIpFromHeroku = useCallback((ignoreActive = false) => new Promise((resolve) => {
     axios.get('https://beatme-get-ip.herokuapp.com/ip').then((result) => {
@@ -100,8 +101,8 @@ export const ServerProvider = ({ children }) => {
       serverLoading,
       setServerLoading,
       getIpRequest: getIpFromHeroku,
-      isActive,
       playerServer,
+      isActive,
       // setServer,
     }),
     [
@@ -109,8 +110,8 @@ export const ServerProvider = ({ children }) => {
       serverLoading,
       setServerLoading,
       getIpFromHeroku,
-      isActive,
       playerServer,
+      isActive,
       // setServer,
     ],
   );

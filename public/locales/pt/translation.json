@@ -6,6 +6,7 @@
     "login.google": "entrar com google",
     "login.twitter": "entrar com twitter",
     "no.session.message": "não conseguimos encontrar sessões activas nesta rede, nem nas proximidades. tens a certeza que existe um beatme aqui?",
+    "no.session.message.not.supported": "*se queres iniciar um beatme, tenta com um dos browsers suportados (Chrome, Firefox ou Microsoft Edge)",
     "server.start.label": "iniciar rádio",
     "server.skip.label": "avançar música",
     "menu.welcome": "bem vindo",

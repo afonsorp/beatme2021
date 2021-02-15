@@ -6,6 +6,7 @@
     "login.google": "login with google",
     "login.twitter": "login with twitter",
     "no.session.message": "looks like there are no active sessions on this network, nor nearby. are you sure there's a beatme working here?",
+    "no.session.message.not.supported": "*if you want to start a new beatme, please try one of the supported browsers (Chrome, Firefox ou Microsoft Edge)",
     "server.start.label": "start player",
     "server.skip.label": "skip music",
     "menu.welcome": "welcome",
