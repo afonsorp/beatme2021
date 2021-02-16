@@ -38,9 +38,9 @@ export const ServerProvider = ({ children }) => {
   }, []);
 
   const watchActive = useCallback((ip) => {
+    if (!ip || !database) return;
     database.ref(`/servers/${ip}/active`).on('value', (snapshot) => {
       const active = snapshot.val();
-      console.log({ active });
       setIsActive(active);
     });
   }, [database]);
@@ -50,7 +50,6 @@ export const ServerProvider = ({ children }) => {
     setServerLoading(false);
     setInStorage(resolveIp);
     setServer(resolveIp);
-    console.log('watchActive');
     watchActive(resolveIp);
   }, [setInStorage, watchActive]);
 
