@@ -49,10 +49,10 @@ const getComponent = ({
 };
 
 const PrivateRoute = ({ children, ...rest }) => {
-  const { user, loadingUser, isActive } = useAuth();
-  const { server, serverLoading } = useServer();
+  const { user, loadingUser } = useAuth();
+  const { server, serverLoading, isActive } = useServer();
   if (serverLoading || loadingUser) return <LoadingComponent />;
-  const needsRedirect = !loadingUser && !serverLoading && (!user || !server);
+  const needsRedirect = !loadingUser && !serverLoading && (!user || !server || !isActive);
   const component = getComponent({
     server, user, children, isActive,
   });
@@ -72,9 +72,6 @@ PrivateRoute.propTypes = {
 
 const BeatmeRouter = () => {
   const { authRoutes } = useAuth();
-  const { isActive } = useAuth();
-  console.log({ isActive });
-
   return (
     <>
       <Switch>
