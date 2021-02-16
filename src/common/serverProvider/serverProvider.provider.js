@@ -50,6 +50,7 @@ export const ServerProvider = ({ children }) => {
     setServerLoading(false);
     setInStorage(resolveIp);
     setServer(resolveIp);
+    console.log('watchActive');
     watchActive(resolveIp);
   }, [setInStorage, watchActive]);
 
