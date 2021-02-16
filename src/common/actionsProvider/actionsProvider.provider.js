@@ -48,7 +48,8 @@ export const ActionsProvider = ({ children }) => {
   }, [database, user, startPlaying]);
 
   const deactivateServer = useCallback(() => {
-    if (!database || !server || (user && !user.isAdmin)) return;
+    const isAdmin = user ? user.isAdmin : false;
+    if (!database || !server || !isAdmin) return;
     database.ref(`/servers/${server}`).update({
       active: false,
       action: new Date(),
