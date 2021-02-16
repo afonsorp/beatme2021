@@ -86,7 +86,7 @@ const USER_ROUTES = [
 
 export const AuthProvider = ({ children }) => {
   const { t } = useTranslation();
-  const { server, playerServer } = useServer();
+  const { server, playerServer, setServer } = useServer();
   const {
     auth,
     firestore,
@@ -122,12 +122,13 @@ export const AuthProvider = ({ children }) => {
     auth.signOut().then(() => {
       setUser();
       setAuthRoutes([]);
+      if (user.isAdmin) setServer();
       setLoadingUser(false);
       history.push('/login');
     }).catch(() => {
       setLoadingUser(false);
     });
-  }, [auth, history]);
+  }, [auth, history, setServer, user]);
 
   const setLastSongFromUser = useCallback((song) => {
     const nUser = user;

@@ -22,7 +22,7 @@ export const ActionsProvider = ({ children }) => {
   } = useFirebase();
   const { server, getIpRequest } = useServer();
   const {
-    startPlaying, play: skip, playing, playlist, songLimitValue,
+    startPlaying, play: skip, playing, playlist, songLimitValue, player,
   } = useSpotify();
   const { user, setUser, setLastSongFromUser } = useAuth();
 
@@ -49,12 +49,12 @@ export const ActionsProvider = ({ children }) => {
 
   const deactivateServer = useCallback(() => {
     const isAdmin = user ? user.isAdmin : false;
-    if (!database || !server || !isAdmin) return;
+    if (!database || !server || !isAdmin || !player) return;
     database.ref(`/servers/${server}`).update({
       active: false,
       action: new Date(),
     });
-  }, [database, server, user]);
+  }, [database, server, user, player]);
 
   const registerRadio = useCallback(() => new Promise((resolve) => {
     if (!server) {
@@ -234,11 +234,12 @@ export const ActionsProvider = ({ children }) => {
   );
 
   const setupBeforeUnloadListener = useCallback(() => {
+    if (!database || !server || !user || !user.isAdmin || !player) return;
     window.addEventListener('beforeunload', (ev) => {
       ev.preventDefault();
       return deactivateServer();
     });
-  }, [deactivateServer]);
+  }, [deactivateServer, database, server, user, player]);
 
   useEffect(() => setupBeforeUnloadListener(), [setupBeforeUnloadListener]);
 

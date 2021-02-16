@@ -6,7 +6,7 @@
 }
 .a-config-username{
   width: fit-content;
-  border-bottom: 1px solid $base-color;
+  border-bottom: 1px solid $secondary-color;
   margin: 3rem 0 2rem;
 }
 
@@ -68,7 +68,9 @@
     margin: 0;
     margin: 0 0 1rem 0;
     padding: 0.5rem 1rem;
-    background-color: $base-color;
+    background-color: $secondary-color;
+    color: $base-color;
+    border: none;
   }
 }
 

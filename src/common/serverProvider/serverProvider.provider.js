@@ -103,7 +103,7 @@ export const ServerProvider = ({ children }) => {
       getIpRequest: getIpFromHeroku,
       playerServer,
       isActive,
-      // setServer,
+      setServer,
     }),
     [
       server,
@@ -112,7 +112,7 @@ export const ServerProvider = ({ children }) => {
       getIpFromHeroku,
       playerServer,
       isActive,
-      // setServer,
+      setServer,
     ],
   );
 

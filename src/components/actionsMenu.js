@@ -15,16 +15,18 @@ import { useActions } from '../common/actionsProvider/actionsProvider.useActions
 
 const ActionsMenu = () => {
   const { t } = useTranslation();
-  const { user: { photoURL, name }, authRoutes, logout } = useAuth();
+  const { user: { photoURL, name, isAdmin }, authRoutes, logout } = useAuth();
   const { disconnectPlayer } = useSpotify();
   const { deactivateServer } = useActions();
   const menuElements = authRoutes.filter((obj) => obj.showInMenu);
 
   const onLogout = useCallback(() => {
-    disconnectPlayer();
-    deactivateServer();
+    if (isAdmin) {
+      disconnectPlayer();
+      deactivateServer();
+    }
     logout();
-  }, [disconnectPlayer, deactivateServer, logout]);
+  }, [disconnectPlayer, deactivateServer, logout, isAdmin]);
 
   return (
     <Menu

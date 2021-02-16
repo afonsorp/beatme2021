@@ -268,8 +268,8 @@ export const SpotifyProvider = ({ children }) => {
 
   const startPlaying = useCallback(() => {
     // const token = '[My Spotify Web API access token]';
-    // const { current } = player;
-    const nPlayer = new window.Spotify.Player({
+    const { current } = player;
+    const nPlayer = current || new window.Spotify.Player({
       name: 'Beatme Player',
       getOAuthToken: (cb) => {
         cb(token.current);
@@ -373,6 +373,7 @@ export const SpotifyProvider = ({ children }) => {
       topDj,
       getUserRecommend,
       tokenSpotify,
+      player: player.current,
     }),
     [
       getAndUpdateToken,
