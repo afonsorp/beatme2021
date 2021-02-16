@@ -40,7 +40,8 @@ export const ServerProvider = ({ children }) => {
   const watchActive = useCallback((ip) => {
     database.ref(`/servers/${ip}/active`).on('value', (snapshot) => {
       const active = snapshot.val();
-      setIsActive(() => active);
+      console.log({ active });
+      setIsActive(active);
     });
   }, [database]);
 
