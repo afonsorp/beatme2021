@@ -50,7 +50,7 @@ export const ServerProvider = ({ children }) => {
     setInStorage(resolveIp);
     setServer(resolveIp);
     watchActive(resolveIp);
-  }, [setInStorage]);
+  }, [setInStorage, watchActive]);
 
   const getIpFromHeroku = useCallback((ignoreActive = false) => new Promise((resolve) => {
     axios.get('https://beatme-get-ip.herokuapp.com/ip').then((result) => {

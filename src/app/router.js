@@ -72,6 +72,8 @@ PrivateRoute.propTypes = {
 
 const BeatmeRouter = () => {
   const { authRoutes } = useAuth();
+  const { isActive } = useAuth();
+  console.log({ isActive });
 
   return (
     <>
