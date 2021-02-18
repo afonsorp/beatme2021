@@ -42,7 +42,7 @@ const getComponent = ({
       </>
     );
   }
-  if (!user.isAdmin && (!server || !isActive)) {
+  if (user && !user.isAdmin && (!server || !isActive)) {
     return <NoPlayer />;
   }
   return <Login />;
