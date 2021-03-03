@@ -1,6 +1,5 @@
 @import '../app/variables.scss';
 
-
 .parallax-container {
   position: fixed;
   top: 0;
@@ -21,118 +20,90 @@
 }
 
 .parallax-image {
-  // height: 100vh;
   position: relative;
   transform-style: preserve-3d;
-  // font-size: 20px;
   height: calc(100% - 125px);
 }
 
 .parallax-background {
   transform: translateZ(-1px) scale(2);
-  // height: 50vh;
   width: 100%;
   position: absolute;
-  // top: 0;
   background: center;
-  // padding-top: 100px;
   background-size: cover;
-  // top: -25vh;
   height: 500px;
   top: -50%;
   display: flex;
   align-items: center;
   justify-content: center;
-
+  &__container{
+    filter: blur(0.3rem);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    transform: scale(1.1);
+    z-index: -1;
+  }
+  &__miniAlbum{
+    width: 150px;
+    height: 150px;
+    background-size: cover;
+    position: absolute;
+    z-index: -1;
+    left: 1rem;
+    display: flex;
+    border: 1px solid $text-color-gray-fade;
+  }
 }
 
 .parallax-playlist {
   position: absolute;
   top: 250px;
-  // height: calc(50vh - 6rem);
   width: 100%; 
   height: 100%;
-  // top: calc(50vh - 8.5rem);
-  // background: #23819C;
-  // opacity: 0.8;
-  // padding-top: 100px;
-  // height: calc(100% - 125px);
 }
 
-
-.parallax {
-  // background-image: url("img_parallax.jpg");
-  // min-height: 50vh; 
-  // background-attachment: fixed;
-  // background-position: center;
-  // background-repeat: no-repeat;
-  // background-size: contain;
-  // opacity: 0.9;
-  // background-position-y: 2rem;
-  // position: relative;
+.m-song-exposer__container{
+  color:$base-color;
+  background-color: $text-color-gray-fade;
+  left:4rem;
+  margin-right: 5rem;
+  position: relative;
+  padding: 0.5rem;
+  @media only screen and (min-width: 768px) {
+    left:auto;
+    margin-right: auto;
+  }
 }
-// .parallax__image,
-// .parallax__text{
-//   display: flex;
-//   align-items: center;
-//   text-align: center;
-//   position: fixed;
-//   width: 100%;
-//   padding: 0 1rem;
-//   max-width: 600px;
-//   min-height: 40vh;
-// }
 
-// .parallax__text{
-//   height: 40vh;
-// }
-
-// .react-parallax-background {
-//   width: 100%;
-//   height: 50vh;
-//   position: absolute;
-// }
-
-// .parallax__image{
-//   padding: 0;
-//   // opacity: 0.9;
-// }
-
-// .m-song-exposer__container{
-//   width: 100%;
-//   max-width: 600px;
-// }
 
 .a-song-exposer__name,
 .a-song-exposer__song,
 .a-song-exposer__band{
   font-size: 1rem;
-  width: fit-content;
-  margin: auto;
-  background-color: rgba($base-color, 0.9);
-  // color: $white-color;
-  line-height: 1.75rem;
-  padding: 0 0.5rem;
-  min-width: 12rem;
-  box-shadow: $strong-shadow-color;
 }
 
 .a-song-exposer__name{
-  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
   padding-bottom: 0;
   min-width: 7rem;
 }
 
 .a-song-exposer__band{
+  margin-top: 0.5rem;
   font-size: 0.75rem;
   padding-top: 0;
   min-width: 7rem;
 }
 
+
+
 .button{
   &.play-button{
-      // background-color: $white-color;
-      background-color: $secondary-color;
+      // background-color: $text-color-gray;
+      background-color: $text-color-gray-fade;
       color:$base-color;
       margin: 0 auto 1rem auto;
       .icon{
@@ -140,10 +111,10 @@
       }
       &.-disabled{
           cursor: none;
-          color: $text-color-gray;
+          color: $text-color;
           .icon{
               cursor: none;
-              color: $text-color-gray;
+              color: $text-color;
           }
       }
   }

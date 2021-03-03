@@ -22,6 +22,7 @@ $play-back: $color-1;
 $white-color: $color-1;
 $text-color: $color-5;
 $text-color-gray: $color-4;
+$text-color-gray-fade: rgba($text-color-gray, 0.8);
 $shadow-color: 0 0.5rem 1rem rgba($text-color, 0.05);
 $strong-shadow-color: 0 1rem 1rem rgba($text-color, 0.15);
 $delete: #FFA79E;

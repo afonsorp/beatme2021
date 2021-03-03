@@ -14,7 +14,7 @@ body {
   overflow: hidden;
 }
 
-html, body, #root, #root > div:first-of-type:not(.customHeight) {
+html, body, #root, #root > div:first-of-type {
   height: 100%;
   width: 100%;
   margin: auto;

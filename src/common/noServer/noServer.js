@@ -13,24 +13,25 @@ const NoServer = ({ notSupportedMessage }) => {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
   return (
-    <div className="o-noServer">
-      <BiCommentError className="icon icon-full-page" />
-      <p className="a-noServer-text">{t('no.session.message')}</p>
-      <BrowserView>
-        { user && (
-        <button className="button" type="button" onClick={logout}>
-          <img src={user.photoURL} alt={user.name} className="avatar" />
-          {t('menu.logout')}
-        </button>
-        )}
-        { notSupportedMessage && (
-        <p className="a-noServer-text a-noServer-supportedText">
-          <i>{t('no.session.message.not.supported')}</i>
-        </p>
-        )}
-      </BrowserView>
-
-      <PoweredBy />
+    <div>
+      <div className="o-noServer">
+        <BiCommentError className="icon icon-full-page" />
+        <p className="a-noServer-text">{t('no.session.message')}</p>
+        <BrowserView>
+          { user && (
+          <button className="button" type="button" onClick={logout}>
+            <img src={user.photoURL} alt={user.name} className="avatar" />
+            {t('menu.logout')}
+          </button>
+          )}
+          { notSupportedMessage && (
+          <p className="a-noServer-text a-noServer-supportedText">
+            <i>{t('no.session.message.not.supported')}</i>
+          </p>
+          )}
+        </BrowserView>
+        <PoweredBy />
+      </div>
     </div>
   );
 };

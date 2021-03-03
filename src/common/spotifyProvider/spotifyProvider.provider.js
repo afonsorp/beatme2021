@@ -253,22 +253,30 @@ export const SpotifyProvider = ({ children }) => {
     });
   }), [getSongToPlay, token, deviceId, database]);
 
+  const timerUpdateInterval = useRef();
   const startTimerUpdate = useCallback(() => {
-    const { current } = player;
-    setInterval(() => {
+    if (timerUpdateInterval.current) clearInterval(timerUpdateInterval.current);
+    timerUpdateInterval.current = setInterval(() => {
+      const { current } = player;
       if (!current) return;
       current.getCurrentState().then((state) => {
         if (!state) return;
+        const { current: isChanging } = changing;
         const { position, paused } = state;
+        if (paused && position === 0 && !isChanging) {
+          console.log('issue playing, trying to recover from it...');
+          play({ ignorePlaying: false });
+        }
         if (paused) return;
         database.ref(`playlists/${serverRef.current}/playing`).update({ position });
       });
     }, 10000);
-  }, [player, database]);
+  }, [player, database, play]);
 
   const startPlaying = useCallback(() => {
     // const token = '[My Spotify Web API access token]';
     const { current } = player;
+    if (current) return;
     const nPlayer = current || new window.Spotify.Player({
       name: 'Beatme Player',
       getOAuthToken: (cb) => {

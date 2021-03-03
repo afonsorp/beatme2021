@@ -29,7 +29,7 @@ const Login = ({ isPlayer }) => {
   }, [history, user]);
 
   return (
-    <>
+    <div>
       <div className="m-login-top__container">
         <div className="wave -one" />
         <div className="wave -two" />
@@ -66,7 +66,7 @@ const Login = ({ isPlayer }) => {
         <PoweredBy />
       </div>
 
-    </>
+    </div>
   );
 };
 

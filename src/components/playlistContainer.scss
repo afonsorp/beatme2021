@@ -5,10 +5,12 @@
   height: 100%;
   background-color:transparent;
   &.-home{
+    // height: calc(100vh - 250px);
     // height: calc(100vh - 14rem);
     // height: 100vh;
     // margin-top: -6rem;
     .m-playlist__container__list{
+      // height: fit-content;
       // top: 4rem;
       // height: calc(100vh - 15rem);
       // height: 100vh;

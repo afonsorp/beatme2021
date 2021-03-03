@@ -12,7 +12,8 @@ import { Waves } from './svgWaveContainer';
 const Home = () => {
   const { playing } = useSpotify();
   const usename = playing && playing.owner ? playing.owner.name : 'N/A';
-  const cover = playing && playing.album ? playing.album.backImage.url : BlankCd;
+  const cover = playing && playing.album ? playing.album.middleImage.url : BlankCd;
+  const albumImage = playing && playing.album ? playing.album.middleImage.url : BlankCd;
   const artist = playing && playing.artist ? playing.artist.name : 'N/A';
   const music = playing ? playing.name : 'N/A';
 
@@ -20,7 +21,9 @@ const Home = () => {
 
     <div className="parallax-container">
       <div className="parallax-image">
-        <div className="parallax-background" style={{ backgroundImage: `url(${cover})` }}>
+        <div className="parallax-background">
+          <container className="parallax-background__container" style={{ backgroundImage: `url(${cover})` }} />
+          <span className="parallax-background__miniAlbum" style={{ backgroundImage: `url(${albumImage})` }} />
           <center>
             <span className="parallax__text">
               <div className="m-song-exposer__container">
@@ -34,6 +37,7 @@ const Home = () => {
             </span>
 
           </center>
+          {/* </container> */}
         </div>
         <div className="parallax-playlist">
           {/* <center> */}
