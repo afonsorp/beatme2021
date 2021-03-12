@@ -2,12 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useServer } from '../serverProvider/serverProvider.useServer';
 import { useSpotify } from '../spotifyProvider/spotifyProvider.useSpotify';
 
+const getMinutesRight = (minutes) => `${(minutes < 10 ? '0' : '') + minutes}`;
+
 const getClockFromMillis = (millis) => {
   const minutes = Math.floor(millis / 60000);
   const seconds = ((millis % 60000) / 1000).toFixed(0);
   const time = seconds === '60'
-    ? `${minutes * 1 + 1}:00`
-    : `${(minutes < 10 ? '0' : '') + minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    ? `${getMinutesRight(minutes * 1 + 1)}:00`
+    : `${getMinutesRight(minutes)}:${seconds < 10 ? '0' : ''}${seconds}`;
   return time;
 };
 
