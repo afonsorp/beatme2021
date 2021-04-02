@@ -213,7 +213,7 @@ export const ServerProvider = ({ children }) => {
   }), [getServerList]);
 
   useEffect(() => {
-    if (!serverLoading || !functions || !location || !database) return;
+    if (!serverLoading || !functions || !location || !database || server) return;
     setServerLoading(true);
     getFromUrl().then((resUrl) => {
       if (resUrl) {
@@ -239,7 +239,10 @@ export const ServerProvider = ({ children }) => {
     // getFromStorage,
     // getIpRequest,
     setServerKey,
-    serverLoading, getIpFromHeroku]);
+    serverLoading,
+    getIpFromHeroku,
+    server,
+  ]);
 
   return (
     <ServerContext.Provider value={value}>
