@@ -17,6 +17,11 @@ const searchControl = new GeoSearchControl({
   provider,
   style: 'bar',
   showMarker: false,
+  resultFormat: ({ result }) => {
+    console.log({ result });
+
+    return result.label;
+  },
 });
 
 const MapConfig = ({ location, setLocation }) => {
