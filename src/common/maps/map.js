@@ -17,9 +17,10 @@ const MapConfig = ({ location, setLocation }) => {
   });
   const map = useRef();
 
-  const searchLayer = L.geoJson().addTo(map);
+  const searchLayer = L.layerGroup().addTo(map);
   // ... adding data in searchLayer ...
-  L.map('map', { searchControl: { layer: searchLayer } });
+  map.addControl(new L.Control.Search({ layer: searchLayer }));
+  // searchLayer is a L.LayerGroup contains searched markers
 
   const formatAndSetLocation = useCallback((loc) => {
     const formatLoc = {
