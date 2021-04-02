@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SearchForm from './search.form';
-import './search.scss';
+// import './search.scss';
 import { Waves } from './svgWaveContainer';
 import SwipeableListComp, { LIST_TYPES } from './swipeableList';
 

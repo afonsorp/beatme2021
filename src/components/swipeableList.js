@@ -12,7 +12,7 @@ import SwipeableListPlayedElement from './swipeableListPlayedElement';
 import SwipeableListTopDjElement from './swipeableListTopDjElement';
 import SwipeableListFavoritesElement from './swipeableListFavoritesElement';
 import '@sandstreamdev/react-swipeable-list/dist/styles.css';
-import './swipeableList.scss';
+// import './swipeableList.scss';
 
 export const LIST_TYPES = {
   SEARCH: 'search',

@@ -1,7 +1,7 @@
 import React from 'react';
 import ActionsMenu from './actionsMenu';
 
-import './topMenu.scss';
+// import './topMenu.scss';
 
 const TopMenu = () => (
   <header className="m-beatme-header">

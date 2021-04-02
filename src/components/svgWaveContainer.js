@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import waves from '../images/svg_2.png';
-import './svgWaveContainer.scss';
+// import './svgWaveContainer.scss';
 
 export const Waves = ({ className }) => (
   <div className={classnames('playlist-waves-container', className)} style={{ backgroundImage: `url(${waves})` }} />

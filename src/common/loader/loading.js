@@ -8,7 +8,7 @@ import { useAuth } from '../authProvider/authProvider.useAuth';
 import { useServer } from '../serverProvider/serverProvider.useServer';
 import PoweredBy from '../poweredBy/poweredBy';
 
-import './loading.scss';
+// import './loading.scss';
 
 const LoadingComponent = () => {
   const { loadingUser } = useAuth();

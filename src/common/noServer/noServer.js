@@ -7,7 +7,7 @@ import {
 } from 'react-icons/bi';
 import { useAuth } from '../authProvider/authProvider.useAuth';
 import PoweredBy from '../poweredBy/poweredBy';
-import './noServer.scss';
+// import './noServer.scss';
 
 const NoServer = ({ notSupportedMessage }) => {
   const { t } = useTranslation();

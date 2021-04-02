@@ -155,3 +155,34 @@ code {
   overflow: auto;
   padding: 1rem;
 }
+
+
+//import home.scss
+@import '../components/home.scss';
+
+//import playlistContainer.scss
+@import '../components/playlistContainer.scss';
+
+//import search.scss
+@import '../components/search.scss';
+
+//import svgWaveContainer.scss
+@import '../components/svgWaveContainer.scss';
+
+// import swipeableList.scss
+@import '../components/swipeableList.scss';
+
+// import topMenu.scss
+@import '../components/topMenu.scss';
+
+// import loading.scss
+@import '../common/loader/loading.scss';
+
+// import poweredBy.scss
+@import '../common/poweredBy/poweredBy.scss';
+
+// import noServer.scss
+@import '../common/noServer/noServer.scss';
+
+// import 404.scss
+@import '../common/notFound/404.scss';

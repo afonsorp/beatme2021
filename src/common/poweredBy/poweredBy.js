@@ -1,6 +1,6 @@
 import React from 'react';
 import Spotify from '../../images/spotify.png';
-import './poweredBy.scss';
+// import './poweredBy.scss';
 
 const PoweredBy = () => (
   <div className="m-powered-by">

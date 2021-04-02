@@ -211,7 +211,9 @@ export const SpotifyProvider = ({ children }) => {
     const { favGenres } = adminUser.details;
     const genre = favGenres[Math.floor(Math.random() * favGenres.length)];
     const seed = playingRef.current && playingRef.current.id ? `seed_artists=${playingRef.current.artist.id}&seed_tracks=${playingRef.current.id}` : `seed_genres=${genre || 'ambient'}`;
-    const url = `${RECOMMENDATIONS_URL}?limit=1&${seed}&max_duration_ms=300000&market=${spotifyCountry.current}`;
+    // eslint-disable-next-line max-len
+    // const url = `${RECOMMENDATIONS_URL}?limit=1&${seed}&max_duration_ms=300000&market=${spotifyCountry.current}`;
+    const url = `${RECOMMENDATIONS_URL}?limit=1&${seed}&market=${spotifyCountry.current}`;
     getRecommend(url).then(resolve);
   }), [getRecommend, user]);
 

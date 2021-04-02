@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   BiCommentX,
 } from 'react-icons/bi';
-import './404.scss';
+// import './404.scss';
 
 const NotFound = () => {
   const { t } = useTranslation();

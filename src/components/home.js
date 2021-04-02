@@ -3,7 +3,7 @@
 import React from 'react';
 // import { Parallax, Background } from 'react-parallax';
 import { useSpotify } from '../common/spotifyProvider/spotifyProvider.useSpotify';
-import './home.scss';
+// import './home.scss';
 import { SongTimer } from '../common/utils/timer';
 import PlaylistContainer from './playlistContainer';
 import BlankCd from '../images/blank_cd.jpeg';
