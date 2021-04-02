@@ -14,7 +14,7 @@ body {
   overflow: hidden;
 }
 
-html, body, #root, #root > div:first-of-type {
+html, body, #root, #root > div:first-of-type, .o-beatme__app {
   height: 100%;
   width: 100%;
   margin: auto;
