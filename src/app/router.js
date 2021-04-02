@@ -75,13 +75,25 @@ const BeatmeRouter = () => {
   return (
     <>
       <Switch>
-        {BASE_ROUTES.map((route) => (
-          <PrivateRoute exact path={route.path} key={route.path}>
-            <div className="o-beatme__app">
-              {route.component}
-            </div>
-          </PrivateRoute>
-        ))}
+        {BASE_ROUTES.map((route) => {
+          console.log({ route });
+          const isPolicy = route.path.includes('privacy_policy');
+          return !isPolicy
+            ? (
+              <PrivateRoute exact path={route.path} key={route.path}>
+                <div className="o-beatme__app">
+                  {route.component}
+                </div>
+              </PrivateRoute>
+            )
+            : (
+              <Route
+                exact
+                path={route.path}
+                render={() => route.component}
+              />
+            );
+        })}
         {authRoutes.map((route) => (
           <PrivateRoute exact path={route.path} key={route.path}>
             <div className="o-beatme__app">

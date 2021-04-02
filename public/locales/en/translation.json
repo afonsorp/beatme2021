@@ -20,6 +20,7 @@
     "menu.help": "help",
     "menu.logout": "logout",
     "menu.home.playlist": "playlist",
+    "menu.home.privacy": "privacy policy",
     "menu.album.info": "album info",
     "menu.no.session": "no session",
     "search.results.suggestions": "suggestions for you",

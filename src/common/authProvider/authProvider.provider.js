@@ -19,6 +19,7 @@ import LastPlayed from '../../pages/lastPlayed';
 import TopDjPage from '../../pages/topDj';
 import Favorites from '../../pages/favorites';
 import QRCode from '../../pages/qrCode';
+import PrivacyPolicy from '../../pages/privacy_policy';
 
 export const BASE_ROUTES = [
   {
@@ -39,6 +40,13 @@ export const BASE_ROUTES = [
     component: <Playlist />,
     showInMenu: false,
   },
+  {
+    path: '/privacy_policy',
+    label: 'menu.home.privacy',
+    component: <PrivacyPolicy />,
+    showInMenu: false,
+  },
+
 ];
 
 const ADMIN_ROUTES = [
