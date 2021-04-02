@@ -45,7 +45,7 @@
     "MaxSong": "maximum number of songs a user can have, simultaneous, in a playlist (1-10)",
     "MaxSongError": "number must be between 1 and 10",
     "CheckBox": "select some of your favorite music genres",
-    "location": "select the beatme position on the map",
+    "location": "select the beatme position on the map. make sure you have the red mark where you clicked",
     "config.submit": "submit",
     "direct.link.details":"if someone can't connect to your server, you can try reading the QR code and access directly"
 }
