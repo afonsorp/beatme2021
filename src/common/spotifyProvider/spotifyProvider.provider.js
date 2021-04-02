@@ -195,7 +195,7 @@ export const SpotifyProvider = ({ children }) => {
     let url = '';
     if (lastSongByUser) {
       const seed = `seed_tracks=${lastSongByUser}`;
-      url = `${RECOMMENDATIONS_URL}?limit=5&${seed}&max_duration_ms=300000&market=${spotifyCountry.current}`;
+      url = `${RECOMMENDATIONS_URL}?limit=5&${seed}&max_duration_ms=600000&market=${spotifyCountry.current}`;
     } else {
       url = `${SEARCH_URL}?limit=5&q=${getRandomSearch()}*&type=track&market=${spotifyCountry.current}`;
     }
@@ -211,9 +211,7 @@ export const SpotifyProvider = ({ children }) => {
     const { favGenres } = adminUser.details;
     const genre = favGenres[Math.floor(Math.random() * favGenres.length)];
     const seed = playingRef.current && playingRef.current.id ? `seed_artists=${playingRef.current.artist.id}&seed_tracks=${playingRef.current.id}` : `seed_genres=${genre || 'ambient'}`;
-    // eslint-disable-next-line max-len
-    // const url = `${RECOMMENDATIONS_URL}?limit=1&${seed}&max_duration_ms=300000&market=${spotifyCountry.current}`;
-    const url = `${RECOMMENDATIONS_URL}?limit=1&${seed}&market=${spotifyCountry.current}`;
+    const url = `${RECOMMENDATIONS_URL}?limit=1&${seed}&max_duration_ms=600000&market=${spotifyCountry.current}`;
     getRecommend(url).then(resolve);
   }), [getRecommend, user]);
 
