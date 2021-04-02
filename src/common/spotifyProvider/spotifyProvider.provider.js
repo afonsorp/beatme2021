@@ -51,6 +51,10 @@ export const SpotifyProvider = ({ children }) => {
       setServerLoading(false);
       token.current = nToken;
       setTokenSpotify(nToken);
+      lastTokenTime.current = new Date();
+      setTimeout(() => {
+        gettingToken.current = false;
+      }, 10000);
     }
   }, [setServerLoading]);
 
@@ -72,11 +76,7 @@ export const SpotifyProvider = ({ children }) => {
           const { country, songLimit } = adminUser.details;
           user.current = adminUser;
           setTokenNeeded(accessToken);
-          lastTokenTime.current = new Date();
           if (serverToUse) database.ref(`playlists/${serverToUse}`).update({ accessToken, country, songLimit });
-          setTimeout(() => {
-            gettingToken.current = false;
-          }, 10000);
           resolve(accessToken);
         }).catch(() => resolve(false));
       } else {
