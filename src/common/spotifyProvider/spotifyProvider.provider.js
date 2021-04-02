@@ -282,8 +282,10 @@ export const SpotifyProvider = ({ children }) => {
     const nPlayer = current || new window.Spotify.Player({
       name: 'Beatme Player',
       getOAuthToken: (cb) => {
-        cb(token.current);
-        // getAndUpdateToken(adminUser).then((t) => cb(t));
+        getAndUpdateToken(user).then((t) => {
+          console.log('Player Requested Token');
+          cb(t || token.current);
+        });
       },
     });
     nPlayer.addListener('initialization_error', ({ message }) => { console.error(message); });
