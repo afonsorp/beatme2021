@@ -9,11 +9,14 @@ import L from 'leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-geosearch/dist/geosearch.css';
 
 const provider = new OpenStreetMapProvider();
 
 const searchControl = new GeoSearchControl({
   provider,
+  style: 'bar',
+  showMarker: false,
 });
 
 const MapConfig = ({ location, setLocation }) => {
