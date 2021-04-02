@@ -201,7 +201,7 @@ export const ServerProvider = ({ children }) => {
       if (navigator.geolocation) {
         const options = {
           // enableHighAccuracy: true,
-          timeout: 5000,
+          timeout: 10000,
           maximumAge: 600000,
         };
         navigator.geolocation.getCurrentPosition(UserLocation, Failed, options);

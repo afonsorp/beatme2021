@@ -76,7 +76,6 @@ const BeatmeRouter = () => {
     <>
       <Switch>
         {BASE_ROUTES.map((route) => {
-          console.log({ route });
           const isPolicy = route.path.includes('privacy_policy');
           return !isPolicy
             ? (
