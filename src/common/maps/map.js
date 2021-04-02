@@ -8,6 +8,7 @@ import {
 import L from 'leaflet';
 
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-search/src/leaflet-search.css';
 
 const MapConfig = ({ location, setLocation }) => {
   const [center, setCenter] = useState({
@@ -15,6 +16,10 @@ const MapConfig = ({ location, setLocation }) => {
     lng: location.lng || -9.184,
   });
   const map = useRef();
+
+  const searchLayer = L.geoJson().addTo(map);
+  // ... adding data in searchLayer ...
+  L.map('map', { searchControl: { layer: searchLayer } });
 
   const formatAndSetLocation = useCallback((loc) => {
     const formatLoc = {
