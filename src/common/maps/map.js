@@ -61,6 +61,7 @@ const MapConfig = ({ location, setLocation }) => {
     setCenter(position);
     map.current.flyTo(position, 17);
     map.current.locate();
+    map.current.addControl(searchControl);
   }, [map]);
 
   const findPosition = useCallback(() => {
@@ -78,8 +79,6 @@ const MapConfig = ({ location, setLocation }) => {
       }, (err) => console.error({ err }));
     }
   }, [location, moveInMap, formatAndSetLocation]);
-
-  if (map.current) map.current.addControl(searchControl);
 
   return (
     <MapContainer
