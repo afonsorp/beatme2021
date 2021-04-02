@@ -6,9 +6,15 @@ import {
   MapContainer, TileLayer, useMapEvents, Marker,
 } from 'react-leaflet';
 import L from 'leaflet';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
 import 'leaflet/dist/leaflet.css';
-import 'leaflet-search/src/leaflet-search.css';
+
+const provider = new OpenStreetMapProvider();
+
+const searchControl = new GeoSearchControl({
+  provider,
+});
 
 const MapConfig = ({ location, setLocation }) => {
   const [center, setCenter] = useState({
@@ -16,11 +22,6 @@ const MapConfig = ({ location, setLocation }) => {
     lng: location.lng || -9.184,
   });
   const map = useRef();
-
-  const searchLayer = L.layerGroup().addTo(map);
-  // ... adding data in searchLayer ...
-  map.addControl(new L.Control.Search({ layer: searchLayer }));
-  // searchLayer is a L.LayerGroup contains searched markers
 
   const formatAndSetLocation = useCallback((loc) => {
     const formatLoc = {
@@ -69,6 +70,8 @@ const MapConfig = ({ location, setLocation }) => {
       }, (err) => console.error({ err }));
     }
   }, [location, moveInMap, formatAndSetLocation]);
+
+  if (map.current) map.current.addControl(searchControl);
 
   return (
     <MapContainer
