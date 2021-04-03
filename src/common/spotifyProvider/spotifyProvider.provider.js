@@ -66,6 +66,7 @@ export const SpotifyProvider = ({ children }) => {
       const newDate = new Date();
       const { current: lastDateDate } = lastTokenTime;
       const isTime = (newDate - lastDateDate) > DIFFERENCE;
+      console.log({ isTime, serverToUse, tokenCurrent: token.current });
       if (isTime || (!token.current && serverToUse)) {
         const getSpotifyToken = functions.httpsCallable('refreshSpotifyToken');
         getSpotifyToken({ userId: adminUser.email }).then((result) => {
@@ -73,7 +74,7 @@ export const SpotifyProvider = ({ children }) => {
           const { country, songLimit } = adminUser.details;
           user.current = adminUser;
           setTokenNeeded(accessToken);
-          console.log({ serverToUse, tokenCurrent: token.current, accessToken });
+          console.log({ accessToken });
           if (serverToUse) database.ref(`playlists/${serverToUse}`).update({ accessToken, country, songLimit });
           setTimeout(() => {
             gettingToken.current = false;
