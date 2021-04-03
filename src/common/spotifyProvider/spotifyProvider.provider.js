@@ -77,7 +77,7 @@ export const SpotifyProvider = ({ children }) => {
           if (serverToUse) database.ref(`playlists/${serverToUse}`).update({ accessToken, country, songLimit });
           setTimeout(() => {
             gettingToken.current = false;
-          }, 15000);
+          }, 30000);
           resolve(accessToken);
         }).catch(() => resolve(false));
       } else {
