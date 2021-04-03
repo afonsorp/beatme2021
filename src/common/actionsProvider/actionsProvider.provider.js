@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 // import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import NoSleep from 'nosleep.js';
 import ActionsContext from './actionsProvider.context';
 import { useAuth } from '../authProvider/authProvider.useAuth';
 import { useFirebase } from '../firebaseProvider/firebaseProvider.useFirebase';
@@ -25,7 +26,7 @@ export const ActionsProvider = ({ children }) => {
     startPlaying, play: skip, playing, playlist, songLimitValue, player,
   } = useSpotify();
   const { user, setUser, setLastSongFromUser } = useAuth();
-
+  const noSleep = useMemo(() => new NoSleep(), []);
   const activateServer = useCallback((ip) => {
     const { lat, lng } = user.details.location;
     const info = new Server({
@@ -33,6 +34,7 @@ export const ActionsProvider = ({ children }) => {
       lng,
       active: true,
     }).server;
+    noSleep.disable();
     database.ref(`servers/${ip}`).update({ ...info });
     database.ref(`playlists/${ip}/action`).once('value', (snapshot) => {
       const actionDate = snapshot.val() ? Date.parse(snapshot.val()) : new Date();
@@ -44,8 +46,9 @@ export const ActionsProvider = ({ children }) => {
       } else {
         startPlaying();
       }
+      noSleep.enable();
     });
-  }, [database, user, startPlaying]);
+  }, [database, user, startPlaying, noSleep]);
 
   const deactivateServer = useCallback(() => {
     const isAdmin = user ? user.isAdmin : false;
