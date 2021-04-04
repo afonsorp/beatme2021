@@ -60,6 +60,7 @@ export const ActionsProvider = ({ children }) => {
   }, [database, server, user, player]);
 
   const registerRadio = useCallback(() => new Promise((resolve) => {
+    if (user && user.email) firestore.collection('servers').doc(user.email).update({ lastAction: new Date() });
     if (!server) {
       getIpRequest(true).then((ip) => {
         activateServer(ip);
@@ -69,7 +70,7 @@ export const ActionsProvider = ({ children }) => {
       activateServer(server);
       resolve(server);
     }
-  }), [activateServer, getIpRequest, server]);
+  }), [activateServer, getIpRequest, server, firestore, user]);
 
   const addToFavorites = useCallback((element) => {
     const nSong = {

@@ -66,7 +66,6 @@ export const SpotifyProvider = ({ children }) => {
       const newDate = new Date();
       const { current: lastDateDate } = lastTokenTime;
       const isTime = (newDate - lastDateDate) > DIFFERENCE;
-      console.log({ isTime, serverToUse, tokenCurrent: token.current });
       if (isTime || (!token.current && serverToUse)) {
         const getSpotifyToken = functions.httpsCallable('refreshSpotifyToken');
         getSpotifyToken({ userId: adminUser.email }).then((result) => {
@@ -74,7 +73,6 @@ export const SpotifyProvider = ({ children }) => {
           const { country, songLimit } = adminUser.details;
           user.current = adminUser;
           setTokenNeeded(accessToken);
-          console.log({ accessToken });
           if (serverToUse) database.ref(`playlists/${serverToUse}`).update({ accessToken, country, songLimit });
           setTimeout(() => {
             gettingToken.current = false;
@@ -264,8 +262,8 @@ export const SpotifyProvider = ({ children }) => {
       current.getCurrentState().then((state) => {
         if (!state) return;
         const { current: isChanging } = changing;
-        const { position, paused } = state;
-        if (paused && position === 0 && !isChanging) {
+        const { position, paused, duration } = state;
+        if (((paused && position === 0) || (position > duration)) && !isChanging) {
           console.log('issue playing, trying to recover from it...');
           play({ ignorePlaying: false });
         }
@@ -282,16 +280,16 @@ export const SpotifyProvider = ({ children }) => {
     const nPlayer = current || new window.Spotify.Player({
       name: 'Beatme Player',
       getOAuthToken: (cb) => {
-        getAndUpdateToken(user).then((t) => {
-          console.log('Player Requested Token');
-          cb(t || token.current);
+        database.ref(`playlists/${serverRef.current}/accessToken`).once('value', (snapshot) => {
+          const nTokenForPlayer = snapshot.val() ? snapshot.val() : token.current;
+          cb(nTokenForPlayer);
         });
       },
     });
-    nPlayer.addListener('initialization_error', ({ message }) => { console.error(message); });
-    nPlayer.addListener('authentication_error', ({ message }) => { console.error(message); });
-    nPlayer.addListener('account_error', ({ message }) => { console.error(message); });
-    nPlayer.addListener('playback_error', ({ message }) => { console.error(message); });
+    nPlayer.addListener('initialization_error', ({ message }) => { console.error('initialization_error', message); });
+    nPlayer.addListener('authentication_error', ({ message }) => { console.error('authentication_error', message); });
+    nPlayer.addListener('account_error', ({ message }) => { console.error('account_error', message); });
+    nPlayer.addListener('playback_error', ({ message }) => { console.error('playback_error', message); });
 
     // Playback status updates
     nPlayer.addListener('player_state_changed', (state) => {
@@ -303,7 +301,7 @@ export const SpotifyProvider = ({ children }) => {
           database.ref(`playlists/${serverRef.current}`).update({ action: new Date() }).then(() => {
             setTimeout(() => {
               changing.current = false;
-            }, 5000);
+            }, 10000);
           });
         });
       }
@@ -330,7 +328,7 @@ export const SpotifyProvider = ({ children }) => {
 
     // Connect to the player!
     nPlayer.connect();
-  }, [deviceId, play, database, player, startTimerUpdate]);
+  }, [deviceId, play, database, player, startTimerUpdate, token]);
 
   const disconnectPlayer = useCallback(() => {
     const { current } = player;
