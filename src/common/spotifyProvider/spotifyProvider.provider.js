@@ -275,9 +275,9 @@ export const SpotifyProvider = ({ children }) => {
 
   const startPlaying = useCallback(() => {
     // const token = '[My Spotify Web API access token]';
-    const { current } = player;
-    if (current) return;
-    const nPlayer = current || new window.Spotify.Player({
+    // const { current } = player;
+    // if (current) return;
+    const nPlayer = new window.Spotify.Player({
       name: 'Beatme Player',
       getOAuthToken: (cb) => {
         database.ref(`playlists/${serverRef.current}/accessToken`).once('value', (snapshot) => {
