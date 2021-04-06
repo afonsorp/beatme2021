@@ -257,8 +257,9 @@ export const SpotifyProvider = ({ children }) => {
   const startTimerUpdate = useCallback(() => {
     if (timerUpdateInterval.current) clearInterval(timerUpdateInterval.current);
     timerUpdateInterval.current = setInterval(() => {
+      const { current: isChanging } = changing;
       const { current } = player;
-      if (!current) return;
+      if (!current || isChanging) return;
       current.getCurrentState().then((state) => {
         if (!state) return;
         const { current: isChanging } = changing;
@@ -270,7 +271,7 @@ export const SpotifyProvider = ({ children }) => {
         if (paused) return;
         database.ref(`playlists/${serverRef.current}/playing`).update({ position });
       });
-    }, 10000);
+    }, 15000);
   }, [player, database, play]);
 
   const startPlaying = useCallback(() => {
