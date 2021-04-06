@@ -262,7 +262,6 @@ export const SpotifyProvider = ({ children }) => {
       if (!current || isChanging) return;
       current.getCurrentState().then((state) => {
         if (!state) return;
-        const { current: isChanging } = changing;
         const { position, paused, duration } = state;
         if (((paused && position === 0) || (position > duration)) && !isChanging) {
           console.log('issue playing, trying to recover from it...');
