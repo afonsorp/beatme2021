@@ -264,12 +264,14 @@ export const SpotifyProvider = ({ children }) => {
       const { current: isPlayerStateChanging } = playerStateChanging;
       if (!hasPlayer || isChanging || isPlayerStateChanging) return;
       hasPlayer.getCurrentState().then((state) => {
-        console.log({ isPlayerStateChanging });
+        console.log({ isPlayerStateChanging, hasPlayer });
         if (!state) return;
         const { position, paused, duration } = state;
         if (((paused && position === 0) || (position > duration)) && !isChanging) {
-          console.log('issue playing, trying to recover from it...', paused, position, duration, isChanging);
-          play({ ignorePlaying: false });
+          console.log('issue playing, trying to recover from it...', {
+            paused, position, duration, isChanging,
+          });
+          // play({ ignorePlaying: false });
         }
         if (paused) return;
         database.ref(`playlists/${serverRef.current}/playing`).update({ position });
