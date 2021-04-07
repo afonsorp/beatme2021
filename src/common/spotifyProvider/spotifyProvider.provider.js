@@ -269,7 +269,7 @@ export const SpotifyProvider = ({ children }) => {
         const { position, paused, duration } = state;
         if (((paused && position === 0) || (position > duration)) && !isChanging) {
           console.log('issue playing, trying to recover from it...', {
-            paused, position, duration, isChanging,
+            state,
           });
           // play({ ignorePlaying: false });
         }
