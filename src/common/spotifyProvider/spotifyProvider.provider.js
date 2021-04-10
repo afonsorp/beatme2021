@@ -256,7 +256,6 @@ export const SpotifyProvider = ({ children }) => {
 
   const timerUpdateInterval = useRef();
   const startTimerUpdate = useCallback(() => {
-    console.log('startTimerUpdate');
     if (timerUpdateInterval.current) clearInterval(timerUpdateInterval.current);
     timerUpdateInterval.current = setInterval(() => {
       const { current: isChanging } = changing;
@@ -264,14 +263,13 @@ export const SpotifyProvider = ({ children }) => {
       const { current: isPlayerStateChanging } = playerStateChanging;
       if (!hasPlayer || isChanging || isPlayerStateChanging) return;
       hasPlayer.getCurrentState().then((state) => {
-        console.log({ isPlayerStateChanging, hasPlayer });
         if (!state) return;
         const { position, paused, duration } = state;
         if (((paused && position === 0) || (position > duration)) && !isChanging) {
           console.log('issue playing, trying to recover from it...', {
             state,
           });
-          // play({ ignorePlaying: false });
+          play({ ignorePlaying: position > 0 });
         }
         if (paused) return;
         database.ref(`playlists/${serverRef.current}/playing`).update({ position });
@@ -299,18 +297,16 @@ export const SpotifyProvider = ({ children }) => {
 
     // Playback status updates
     nPlayer.addListener('player_state_changed', (state) => {
-      console.log('player_state_changed', { state });
       const { current: isChanging } = changing;
       const { current: position } = positionRef;
       playerStateChanging.current = true;
       if (state && state.paused && state.position === 0 && !isChanging) {
         changing.current = true;
-        console.log('player_state_changed', { changing: changing.current });
         play({ ignorePlaying: true }).then(() => {
           database.ref(`playlists/${serverRef.current}`).update({ action: new Date() }).then(() => {
             setTimeout(() => {
               changing.current = false;
-            }, 2000);
+            }, 5000);
           });
         });
       }
