@@ -246,6 +246,9 @@ export const SpotifyProvider = ({ children }) => {
           });
           // database.ref(`playlists/${serverRef.current}/playing`)
           // .update(song).then(() => resolve());
+        }).catch((e) => {
+          console.error('error while playing song', e);
+          resolve();
         });
       } else {
         console.error('no song to play was found');
