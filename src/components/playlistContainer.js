@@ -16,7 +16,7 @@ const PlaylistContainer = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { server, isActive } = useServer();
-  const { playlist, deviceId, player } = useSpotify();
+  const { playlist, deviceId } = useSpotify();
   const [disabled, setDisabled] = useState();
   const [serverUndefined, setServerUndefined] = useState(true);
   const { registerRadio, skip } = useActions();
