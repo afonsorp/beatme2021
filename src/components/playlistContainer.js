@@ -26,7 +26,7 @@ const PlaylistContainer = () => {
     registerRadio().then(() => {
       setTimeout(() => {
         setDisabled(false);
-      }, 2000);
+      }, 5000);
     });
   }, [registerRadio]);
 
