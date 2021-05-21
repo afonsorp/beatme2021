@@ -394,6 +394,7 @@ export const SpotifyProvider = ({ children }) => {
       topDj,
       getUserRecommend,
       tokenSpotify,
+      deviceId: deviceId.current,
       player: player.current,
     }),
     [

@@ -16,14 +16,18 @@ const PlaylistContainer = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { server, isActive } = useServer();
-  const { playlist } = useSpotify();
+  const { playlist, deviceId, player } = useSpotify();
   const [disabled, setDisabled] = useState();
   const [serverUndefined, setServerUndefined] = useState(true);
   const { registerRadio, skip } = useActions();
 
   const start = useCallback(() => {
     setDisabled(true);
-    registerRadio();
+    registerRadio().then(() => {
+      setTimeout(() => {
+        setDisabled(false);
+      }, 2000);
+    });
   }, [registerRadio]);
 
   const skipSong = useCallback(() => {
@@ -40,7 +44,7 @@ const PlaylistContainer = () => {
   }, [server]);
 
   const getButton = useCallback(() => {
-    if (user.isAdmin && server && isActive) {
+    if (user.isAdmin && server && isActive && deviceId) {
       return (
         <button
           type="button"
@@ -53,7 +57,7 @@ const PlaylistContainer = () => {
         </button>
       );
     }
-    if (user.isAdmin && (!server || (server && !isActive))) {
+    if (user.isAdmin && (!server || (server && (!isActive || !deviceId)))) {
       return (
         <button
           type="button"
@@ -77,7 +81,16 @@ const PlaylistContainer = () => {
         {t('menu.search')}
       </button>
     );
-  }, [server, user.isAdmin, t, disabled, start, isActive, skipSong, add, serverUndefined]);
+  }, [server,
+    user.isAdmin,
+    t,
+    disabled,
+    start,
+    isActive,
+    skipSong,
+    add,
+    serverUndefined,
+    deviceId]);
 
   return (
     <div className="m-playlist__container -home">
